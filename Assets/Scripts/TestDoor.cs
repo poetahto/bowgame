@@ -13,7 +13,6 @@ public class TestDoor : MonoBehaviour, ShootableObject
     {
         if (anim == null)
         {
-            Debug.Log("start anim");
             anim = StartCoroutine(OpenDoor());
         }
     }
