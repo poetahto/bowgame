@@ -131,6 +131,7 @@ public class Player : MonoBehaviour
         // convert player's input into a 3D vector that represents a target velocity
         desiredVelocity = (transform.right * playerInput.x + transform.forward * playerInput.y) * maxSpeed;
     }
+
     private void UpdateVelocity()
     {
         UpdateState();
