@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ShootableObject
 {
-    void OnHit(ArrowLogic arrow);
+    void OnHit(Arrow arrow);
 }

@@ -8,11 +8,9 @@ public class TestDoor : MonoBehaviour, ShootableObject
     private float percentComplete = 0f;
     public float openDistance = 10f;
 
-    public void OnHit(ArrowLogic arrow)
+    public void OnHit(Arrow arrow)
     {
         StartCoroutine(OpenDoor());
-        arrow.transform.SetParent(transform, true);
-        
     }
 
     private IEnumerator OpenDoor()
