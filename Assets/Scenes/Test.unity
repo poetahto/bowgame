@@ -129,7 +129,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh41144
+  m_Name: pb_Mesh47272
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -318,7 +318,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06d8d76735797dc47a4260dc18f909fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  open: 0
   openDistance: 2
 --- !u!65 &193606939
 BoxCollider:
@@ -400,7 +399,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh41108
+  m_Name: pb_Mesh47236
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2788,7 +2787,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh41126
+  m_Name: pb_Mesh47254
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3136,6 +3135,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2292092914657180025, guid: 8740952c88d21a04093263d6f1b9aa8d,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2292092914987042930, guid: 8740952c88d21a04093263d6f1b9aa8d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3336,6 +3340,18 @@ PrefabInstance:
       propertyPath: chargeBar
       value: 
       objectReference: {fileID: 1815770293}
+    - target: {fileID: 594809995, guid: a91d1ad1131cd69468e0af292ea66d70, type: 3}
+      propertyPath: speedLevel1Mills
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 594809995, guid: a91d1ad1131cd69468e0af292ea66d70, type: 3}
+      propertyPath: speedLevel2Mills
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 594809995, guid: a91d1ad1131cd69468e0af292ea66d70, type: 3}
+      propertyPath: speedLevel3Mills
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 5935400633468773216, guid: a91d1ad1131cd69468e0af292ea66d70,
         type: 3}
       propertyPath: m_LocalPosition.x
