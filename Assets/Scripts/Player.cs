@@ -8,24 +8,31 @@ public class Player : MonoBehaviour
 {
     [Header("GameObject References")]
 
-    [SerializeField] private Transform arrowGroup = null;
     [SerializeField] private Transform cameraTransform = null;
     [SerializeField] private Transform characterTransform = null;
-    [SerializeField] private GameObject arrowPrefab = null;
 
     [Header("Movement Properties")]
 
-    //[Range(1f, 100f)]
+    //[Range(1f, 10f)]
+    [SerializeField] private float jumpHeight = 2f;
+
+    //[Range(1f, 10f)]
     [SerializeField] private float mouseSensitivity = 3f;
 
     //[Range(1f, 100f)]
     [SerializeField] private float maxSpeed = 4f;
 
     //[Range(1f, 100f)]
-    [SerializeField] private float acceleration = 26f;
+    [SerializeField] private float acceleration = 26f, airAcceleration = 1f;
 
-    private Vector3 velocity;
+    [Range(0, 5)]
+    [SerializeField] private float maxAirJumps = 0;
+
+    private int jumpPhase;
+    private bool onGround;
+    private bool desiredJump;
     private Vector3 desiredVelocity;
+    private Vector3 velocity;
     private Rigidbody body;
 
     void Awake()
@@ -77,36 +84,10 @@ public class Player : MonoBehaviour
     private void HandleDebugInput()
     {
         //TODO move the spawning and destroying of arrows into a factory class
-
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
         }
-
-        /*
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            var arrow = Instantiate(arrowPrefab);
-            var arrowRigidbody = arrow.GetComponent<Rigidbody>();
-
-            arrow.transform.SetParent(arrowGroup);
-            arrow.transform.position = characterTransform.position + (transform.forward.normalized * 0.5f) + (transform.up * 0.5f);
-            arrow.transform.rotation = cameraTransform.rotation;
-            arrowRigidbody.velocity = (cameraTransform.forward.normalized * 10);
-
-            arrows.Add(arrow);
-        }
-        */
-
-        /*
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            foreach (GameObject arrow in arrows)
-            {
-                Destroy(arrow);
-            }
-        }
-        */
     }
 
     private void HandleMouseInput()
@@ -144,28 +125,57 @@ public class Player : MonoBehaviour
         // normalize movement to stop strafe speed bonus
         playerInput = Vector2.ClampMagnitude(playerInput, 1f);
 
+        // if they player pressed jump, make sure desiredJump is set to true
+        desiredJump |= Input.GetButtonDown("Jump");
+
         // convert player's input into a 3D vector that represents a target velocity
         desiredVelocity = (transform.right * playerInput.x + transform.forward * playerInput.y) * maxSpeed;
     }
     private void UpdateVelocity()
     {
-        velocity = body.velocity;
+        UpdateState();
 
         // represents the most we will be able to change our velocity during this tick
-        float velocityChange = acceleration * Time.deltaTime;
+        float accel = onGround ? acceleration : airAcceleration;
+        float velocityChange = accel * Time.deltaTime;
 
         // increment the velocity towards our desired velocity - acceleration effect
         velocity.x = Mathf.MoveTowards(velocity.x, desiredVelocity.x, velocityChange);
         velocity.z = Mathf.MoveTowards(velocity.z, desiredVelocity.z, velocityChange);
 
+        if (desiredJump)
+        {
+            desiredJump = false;
+            Jump();
+        }
+
         // change our player's position according to their velocity
         body.velocity = velocity;
+        onGround = false;
+    }
+
+    private void Jump()
+    {
+        if (onGround || jumpPhase < maxAirJumps)
+        {
+            if (velocity.y < 0)
+            {
+                velocity.y = 0;
+            }
+            jumpPhase++;
+            float jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * jumpHeight);
+            if (velocity.y > 0f)
+            {
+                jumpSpeed = Mathf.Max(jumpSpeed - velocity.y, 0f);
+            }
+            velocity.y += jumpSpeed;
+        }
     }
 
     private void UpdateCameraPos()
     {
         Vector3 cameraPos = cameraTransform.position;
-        float velocityChange = maxSpeed * Time.deltaTime;
+        float velocityChange = velocity.magnitude * Time.deltaTime;
 
         // make the camera follow the players body around
         cameraPos.x = Mathf.MoveTowards(cameraPos.x, characterTransform.position.x, velocityChange);
@@ -173,5 +183,33 @@ public class Player : MonoBehaviour
         cameraPos.z = Mathf.MoveTowards(cameraPos.z, characterTransform.position.z, velocityChange);
 
         cameraTransform.position = cameraPos;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        EvaluateCollision(collision);
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        EvaluateCollision(collision);
+    }
+
+    private void EvaluateCollision(Collision collision)
+    { 
+        for (int i = 0; i < collision.contactCount; i++)
+        {
+            Vector3 normal = collision.GetContact(i).normal;
+            onGround |= normal.y >= 0.9f;
+        }
+    }
+
+    private void UpdateState() 
+    {
+        velocity = body.velocity;
+        if (onGround)
+        {
+            jumpPhase = 0;
+        }
     }
 }
