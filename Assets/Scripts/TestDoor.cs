@@ -2,37 +2,93 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestDoor : MonoBehaviour, ShootableObject
+public class TestDoor : MonoBehaviour, Chargeable
 {
-    public bool open = false;
-    private float percentComplete = 0f;
     public float openDistance = 10f;
-    private Coroutine anim = null;
 
-    public void OnHit(Arrow arrow)
+    private Vector3 openPosition;
+    private Vector3 closedPosition;
+
+    private DoorState state;
+
+    private List<Arrow> charges;
+
+    private Coroutine curCoroutine = null;
+
+    private void Start()
     {
-        if (anim == null)
+        charges = new List<Arrow>();
+        closedPosition = transform.position;
+        openPosition = closedPosition + new Vector3(0f, openDistance, 0f);
+    }
+
+    private void Update()
+    {
+        Debug.DrawLine(openPosition, closedPosition, Color.red);
+
+        if (charges.Count > 1 && state != DoorState.OPEN && state != DoorState.OPENING)
         {
-            anim = StartCoroutine(OpenDoor());
+            if (curCoroutine != null) StopCoroutine(curCoroutine);
+            curCoroutine = StartCoroutine(OpenDoor());
+        }
+        else if (charges.Count <= 0 && state != DoorState.CLOSED && state != DoorState.CLOSING)
+        {
+            if (curCoroutine != null) StopCoroutine(curCoroutine);
+            curCoroutine = StartCoroutine(CloseDoor());
         }
     }
 
     private IEnumerator OpenDoor()
     {
-        percentComplete = 0f;
-        Vector3 initial = transform.position;
-        float direction = open ? -openDistance : openDistance;
-        Vector3 target = initial + new Vector3(0f, direction, 0f);
+        var percentComplete = 0f;
+        Vector3 target = openPosition;
 
+        state = DoorState.OPENING;
 
         while (transform.position != target)
         {
             percentComplete += Time.deltaTime;
-            transform.position = Vector3.Lerp(initial, target, percentComplete);
+            transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime);
             yield return new WaitForEndOfFrame();
         }
 
-        open = !open;
-        anim = null;
+        state = DoorState.OPEN;
+    }
+
+    private IEnumerator CloseDoor()
+    {
+        var percentComplete = 0f;
+        Vector3 target = closedPosition;
+
+        state = DoorState.CLOSING;
+
+        while (transform.position != target)
+        {
+            percentComplete += Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime);
+            yield return new WaitForEndOfFrame();
+        }
+
+        state = DoorState.CLOSED;
+    }
+
+    public void AddCharge(Arrow arrow)
+    {
+        charges.Add(arrow);
+    }
+
+    public void RemoveCharge(Arrow arrow)
+    {
+        charges.Remove(arrow);
+    }
+
+    public void OnHit() { }
+
+    private enum DoorState 
+    {
+        CLOSED,
+        OPEN,
+        CLOSING,
+        OPENING
     }
 }

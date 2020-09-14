@@ -11,6 +11,7 @@ public class Arrow : MonoBehaviour
 
     // whether the arrow can currently get stuck in something
     private bool active = true;
+    private Chargeable curCharging = null;
 
     // this arrows rigidbody
     private new Rigidbody rigidbody;
@@ -18,6 +19,11 @@ public class Arrow : MonoBehaviour
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody>();
+    }
+
+    private void OnDestroy()
+    {
+        curCharging?.RemoveCharge(this);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -43,7 +49,9 @@ public class Arrow : MonoBehaviour
             if (shouldStick)
             {
                 // if the object we hit has a component that impliments ShootableObject, call it's OnHit method
-                hitObject.GetComponent<ShootableObject>()?.OnHit(this);
+                curCharging = hitObject.GetComponent<Chargeable>();
+                curCharging?.OnHit();
+                curCharging?.AddCharge(this);
 
                 // sink the arrow a little deeper into the object we hit
                 LeanTween.move(gameObject, transform.position + transform.forward.normalized * stickDepth, 0.02f);

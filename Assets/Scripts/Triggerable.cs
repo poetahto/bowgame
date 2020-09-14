@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ShootableObject
+public interface Triggerable
 {
-    void OnHit(Arrow arrow);
+    void Trigger();
 }
