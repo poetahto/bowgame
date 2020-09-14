@@ -4,6 +4,7 @@
 public class AarrowLogic : MonoBehaviour
 {
     public float stickValue = .2f;
+    bool stoped = false;
 
     Rigidbody rigidbody;
 
@@ -16,7 +17,10 @@ public class AarrowLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (!stoped)
+        {
+            transform.LookAt(rigidbody.velocity);
+        }
     }
 
     void OnCollisionEnter(Collision collision)
@@ -25,6 +29,7 @@ public class AarrowLogic : MonoBehaviour
         {
             transform.position += transform.forward.normalized * stickValue;
             rigidbody.isKinematic = true;
+            stoped = true;
 
         }
     }
