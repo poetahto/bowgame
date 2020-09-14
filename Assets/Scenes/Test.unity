@@ -860,6 +860,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48e8be2816eb0074db1b252b69aeb316, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  arrowGroup: {fileID: 1611587283}
+  cameraTransform: {fileID: 1569821834}
+  characterTransform: {fileID: 594810000}
+  arrowPrefab: {fileID: 3568894789279159842, guid: 6629bfc42eb644c4d921dd31fdb3d3d2,
+    type: 3}
+  speedLevel1: 8
+  speedLevel2: 16
+  speedLevel3: 24
+--- !u!4 &594810000 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5935400633468773216, guid: a91d1ad1131cd69468e0af292ea66d70,
+    type: 3}
+  m_PrefabInstance: {fileID: 5935400633357094826}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &633324953
 GameObject:
   m_ObjectHideFlags: 0
