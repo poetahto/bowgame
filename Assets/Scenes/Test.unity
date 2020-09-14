@@ -865,9 +865,13 @@ MonoBehaviour:
   characterTransform: {fileID: 594810000}
   arrowPrefab: {fileID: 3568894789279159842, guid: 6629bfc42eb644c4d921dd31fdb3d3d2,
     type: 3}
-  speedLevel1: 8
-  speedLevel2: 16
-  speedLevel3: 24
+  speedLevel0: 4
+  speedLevel1: 16
+  speedLevel2: 24
+  speedLevel3: 40
+  speedLevel1Mills: 300
+  speedLevel2Mills: 800
+  speedLevel3Mills: 1500
 --- !u!4 &594810000 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5935400633468773216, guid: a91d1ad1131cd69468e0af292ea66d70,

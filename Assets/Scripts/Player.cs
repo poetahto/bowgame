@@ -27,12 +27,10 @@ public class Player : MonoBehaviour
     private Vector3 velocity;
     private Vector3 desiredVelocity;
     private Rigidbody body;
-    private List<GameObject> arrows;
 
     void Awake()
     {
         body = GetComponent<Rigidbody>();
-        arrows = new List<GameObject>();
 
         // TODO move this code to a more intuitive location with more initialization stuff
         Cursor.lockState = CursorLockMode.Locked;
