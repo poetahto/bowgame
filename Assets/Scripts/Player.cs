@@ -88,6 +88,11 @@ public class Player : MonoBehaviour
         {
             Application.Quit();
         }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Time.timeScale = Time.timeScale == 0.25f ? 1f : 0.25f;
+        }
     }
 
     private void HandleMouseInput()

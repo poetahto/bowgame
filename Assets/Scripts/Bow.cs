@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Bow : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class Bow : MonoBehaviour
     [SerializeField] private Transform cameraTransform = null;
     [SerializeField] private Transform characterTransform = null;
     [SerializeField] private GameObject arrowPrefab = null;
-    [SerializeField] private GameObject chargeBar = null;
+    [SerializeField] private RawImage chargeBar = null;
 
     [Header("Bow Properties")]
     public int speedLevel0 = 4;
@@ -19,18 +20,21 @@ public class Bow : MonoBehaviour
 
     public int speedLevel1Mills = 300;
     public int speedLevel2Mills = 600;
-    //public int speedLevel3Mills = 1200;
-    public int speedLevel3Mills = 900;
+    public int speedLevel3Mills = 1200;
+
+    public Color colorLevel0;
+    public Color colorLevel1;
+    public Color colorLevel2;
+    public Color colorLevel3;
 
     private List<GameObject> arrows;
     private LTDescr anim;
 
     private float chargeStart = -1;
 
-    // Start is called before the first frame update
     void Start()
     {
-        
+        chargeBar.color = colorLevel0;
     }
 
     void Awake()
@@ -38,24 +42,23 @@ public class Bow : MonoBehaviour
         arrows = new List<GameObject>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (chargeStart > 0) 
         {
            float chargeTimed = Time.time * 1000 - chargeStart * 1000;
-        if (chargeTimed > speedLevel3Mills)
-        {
-            //Debug.Log("sl3");
-        }
-        else if (chargeTimed > speedLevel2Mills)
-        {
-            //Debug.Log("sl2");
-        }
-        else if (chargeTimed > speedLevel1Mills)
-        {
-            //Debug.Log("sl1");
-        }
+            if (chargeTimed > speedLevel3Mills)
+            {
+                chargeBar.color = colorLevel3;
+            }
+            else if (chargeTimed > speedLevel2Mills)
+            {
+                chargeBar.color = colorLevel2;
+            }
+            else if (chargeTimed > speedLevel1Mills)
+            {
+                chargeBar.color = colorLevel1;
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -63,29 +66,30 @@ public class Bow : MonoBehaviour
             chargeStart = Time.time;
             if (anim == null)
             {
-                anim = LeanTween.scaleX(chargeBar, 5f, 1.8f);
+                anim = LeanTween.scaleX(chargeBar.gameObject, 5f, (speedLevel1Mills + speedLevel2Mills + speedLevel3Mills) / 1000);
             }
         }
 
         if (Input.GetKeyUp(KeyCode.Mouse0))
         {
             LeanTween.cancel(anim.id);
-            chargeBar.transform.localScale = new Vector3(0, 5f, 5f);
+            chargeBar.transform.localScale = new Vector3(0, 2f, 1f);
+            chargeBar.color = colorLevel0;
             anim = null;
 
             float chargeTime = Time.time * 1000 - chargeStart * 1000;
             int speed = speedLevel0;
             if (chargeTime > speedLevel3Mills)
             {
-                Debug.Log("fired 3");
+                //Debug.Log("fired 3");
                 speed = speedLevel3;
             } else if (chargeTime > speedLevel2Mills)
             {
-                Debug.Log("fired 2");
+                //Debug.Log("fired 2");
                 speed = speedLevel2;
             } else if (chargeTime > speedLevel1Mills)
             {
-                Debug.Log("fired 1");
+                //Debug.Log("fired 1");
                 speed = speedLevel1;
             }
             var arrow = Instantiate(arrowPrefab);
