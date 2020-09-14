@@ -80,6 +80,12 @@ public class Player : MonoBehaviour
     {
         //TODO move the spawning and destroying of arrows into a factory class
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
+        /*
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             var arrow = Instantiate(arrowPrefab);
@@ -92,12 +98,9 @@ public class Player : MonoBehaviour
 
             arrows.Add(arrow);
         }
+        */
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
-        }
-
+        /*
         if (Input.GetKeyDown(KeyCode.Return))
         {
             foreach (GameObject arrow in arrows)
@@ -105,6 +108,7 @@ public class Player : MonoBehaviour
                 Destroy(arrow);
             }
         }
+        */
     }
 
     private void HandleMouseInput()
