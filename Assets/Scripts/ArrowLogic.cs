@@ -25,7 +25,6 @@ public class ArrowLogic : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("collided");
         if (collision.gameObject.GetComponent<ShootableObject>() != null)
         {
             collision.gameObject.GetComponent<ShootableObject>().OnHit(this);
