@@ -12,13 +12,13 @@ public class Bow : MonoBehaviour
 
     [Header("Bow Properties")]
     public int speedLevel0 = 4;
-    public int speedLevel1 = 8;
-    public int speedLevel2 = 16;
-    public int speedLevel3 = 24;
+    public int speedLevel1 = 16;
+    public int speedLevel2 = 24;
+    public int speedLevel3 = 42;
 
-    public int speedLevel1Mills = 200;
+    public int speedLevel1Mills = 300;
     public int speedLevel2Mills = 600;
-    public int speedLevel3Mills = 1000;
+    public int speedLevel3Mills = 1200;
 
     private List<GameObject> arrows;
 
@@ -38,6 +38,23 @@ public class Bow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (chargeStart > 0) 
+        {
+           float chargeTimed = Time.time * 1000 - chargeStart * 1000;
+        if (chargeTimed > speedLevel3Mills)
+        {
+            Debug.Log("sl3");
+        }
+        else if (chargeTimed > speedLevel2Mills)
+        {
+            Debug.Log("sl2");
+        }
+        else if (chargeTimed > speedLevel1Mills)
+        {
+            Debug.Log("sl1");
+        }
+        }
+
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             chargeStart = Time.time;
@@ -49,19 +66,18 @@ public class Bow : MonoBehaviour
             int speed = speedLevel0;
             if (chargeTime > speedLevel3Mills)
             {
-                Debug.Log("sl3");
                 speed = speedLevel3;
             } else if (chargeTime > speedLevel2Mills)
             {
-                Debug.Log("sl2");
                 speed = speedLevel2;
             } else if (chargeTime > speedLevel1Mills)
-            {
-                Debug.Log("sl1");
+            { 
                 speed = speedLevel1;
             }
             var arrow = Instantiate(arrowPrefab);
             var arrowRigidbody = arrow.GetComponent<Rigidbody>();
+
+            chargeStart = -1; //DEBUG
 
             arrow.transform.SetParent(arrowGroup);
             arrow.transform.position = characterTransform.position + (transform.forward.normalized * 0.5f) + (transform.up * 0.5f);
