@@ -1,124 +1,162 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.UI;
 
 public class Bow : MonoBehaviour
 {
     [Header("GameObject References")]
-    [SerializeField] private Transform arrowGroup = null;
+
     [SerializeField] private Transform cameraTransform = null;
     [SerializeField] private Transform characterTransform = null;
     [SerializeField] private GameObject arrowPrefab = null;
     [SerializeField] private RawImage chargeBar = null;
 
     [Header("Bow Properties")]
+
     public int speedLevel0 = 4;
     public int speedLevel1 = 16;
     public int speedLevel2 = 24;
     public int speedLevel3 = 42;
 
-    public int speedLevel1Mills = 300;
-    public int speedLevel2Mills = 600;
-    public int speedLevel3Mills = 1200;
+    public float speedLevel1Mills = 0.3f;
+    public float speedLevel2Mills = 0.6f;
+    public float speedLevel3Mills = 1.2f;
 
     public Color colorLevel0;
     public Color colorLevel1;
     public Color colorLevel2;
     public Color colorLevel3;
 
+    public Color[] colors;
+    public int[] arrowSpeeds;
+
+    public int MaxArrows { get; set; }
+    public int CurrentArrows { get; set; }
+    public short ChargeLevel { get; set; }
+
     private List<GameObject> arrows;
-    private LTDescr anim;
+    private LTDescr chargingAnimation;
+    private GameObject arrowGroup = null;
+    private Vector3 originalBarScale;
+
+    private bool charging = false;
 
     private float chargeStart = -1;
 
-    void Start()
-    {
-        chargeBar.color = colorLevel0;
-    }
-
     void Awake()
     {
+        colors = new Color[] { colorLevel0, colorLevel1, colorLevel2, colorLevel3 };
+        arrowSpeeds = new int[] { speedLevel0, speedLevel1, speedLevel2, speedLevel3 };
+
+        arrowGroup = new GameObject("Arrow Group");
         arrows = new List<GameObject>();
+        ChargeLevel = 0;
+        MaxArrows = 10;
+        CurrentArrows = MaxArrows;
+        chargeBar.color = colorLevel0;
+        originalBarScale = chargeBar.transform.localScale;
     }
 
     void Update()
     {
-        if (chargeStart > 0) 
+        UpdateChargeLevel();
+
+        UpdateChargeBar();
+
+        if (Input.GetButtonDown("Fire1"))
         {
-           float chargeTimed = Time.time * 1000 - chargeStart * 1000;
-            if (chargeTimed > speedLevel3Mills)
-            {
-                chargeBar.color = colorLevel3;
-            }
-            else if (chargeTimed > speedLevel2Mills)
-            {
-                chargeBar.color = colorLevel2;
-            }
-            else if (chargeTimed > speedLevel1Mills)
-            {
-                chargeBar.color = colorLevel1;
-            }
+            StartCharging();
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetButtonUp("Fire1"))
         {
-            chargeStart = Time.time;
-            if (anim == null)
-            {
-                anim = LeanTween.scaleX(chargeBar.gameObject, 5f, (speedLevel1Mills + speedLevel2Mills + speedLevel3Mills) / 1000);
-            }
+            ReleaseArrow();
         }
 
-        if (Input.GetKeyUp(KeyCode.Mouse0))
+        if (Input.GetButtonDown("Fire2"))
         {
-            LeanTween.cancel(anim.id);
-            chargeBar.transform.localScale = new Vector3(0, 2f, 1f);
-            chargeBar.color = colorLevel0;
-            anim = null;
-
-            float chargeTime = Time.time * 1000 - chargeStart * 1000;
-            int speed = speedLevel0;
-            if (chargeTime > speedLevel3Mills)
-            {
-                //Debug.Log("fired 3");
-                speed = speedLevel3;
-            } else if (chargeTime > speedLevel2Mills)
-            {
-                //Debug.Log("fired 2");
-                speed = speedLevel2;
-            } else if (chargeTime > speedLevel1Mills)
-            {
-                //Debug.Log("fired 1");
-                speed = speedLevel1;
-            }
-            var arrow = Instantiate(arrowPrefab);
-            var arrowRigidbody = arrow.GetComponent<Rigidbody>();
-
-            chargeStart = -1; //DEBUG
-
-            arrow.transform.SetParent(arrowGroup);
-            arrow.transform.position = characterTransform.position + (transform.forward.normalized * 0.5f) + (transform.up * 0.5f);
-            arrow.transform.rotation = cameraTransform.rotation;
-            arrowRigidbody.velocity = (cameraTransform.forward.normalized * speed);
-
-            arrows.Add(arrow);
+            CollectArrows();
         }
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            foreach (GameObject arrow in arrows)
-            {
-                Destroy(arrow);
-            }
-        }
-
     }
 
+    private void ReleaseArrow()
+    {
+        StopCharging();
 
+        int speed = arrowSpeeds[ChargeLevel];
+        var arrow = Instantiate(arrowPrefab);
+        var arrowRigidbody = arrow.GetComponent<Rigidbody>();
+
+        chargeStart = -1; //DEBUG
+
+        arrow.transform.SetParent(arrowGroup.transform);
+        arrow.transform.position = characterTransform.position + (transform.forward.normalized * 0.5f) + (transform.up * 0.5f);
+        arrow.transform.rotation = cameraTransform.rotation;
+        arrowRigidbody.velocity = (cameraTransform.forward.normalized * speed);
+
+        arrows.Add(arrow);
+    }
+
+    private void StartCharging()
+    {
+        chargeStart = Time.time;
+
+        if (!charging)
+        {
+            chargingAnimation = LeanTween.scaleX(
+                chargeBar.gameObject,   // the object we are scaling
+                5,   // our target scale
+                speedLevel1Mills + speedLevel2Mills + speedLevel3Mills); // how long it will take to scale
+
+            charging = true;
+        }
+    }
+
+    private void StopCharging()
+    {
+        // stop the charging animation if it hasn't already finished
+        LeanTween.cancel(chargingAnimation.id);
+        var newScale = originalBarScale;
+        newScale.x = 0f;
+        chargeBar.transform.localScale = newScale;
+        chargeBar.color = colors[0];
+        charging = false;
+    }
+
+    private void CollectArrows()
+    {
+        foreach (GameObject arrow in arrows)
+        {
+            Destroy(arrow);
+        }
+    }
+
+    private void UpdateChargeLevel()
+    {
+        float chargeTime = Time.time - chargeStart;
+
+        if (chargeTime > speedLevel3Mills)
+        {
+            ChargeLevel = 3;
+        }
+        else if (chargeTime > speedLevel2Mills)
+        {
+            ChargeLevel = 2;
+        }
+        else if (chargeTime > speedLevel1Mills)
+        {
+            ChargeLevel = 1;
+        }
+        else
+        {
+            ChargeLevel = 0;
+        }
+    }
+
+    private void UpdateChargeBar()
+    {
+        chargeBar.color = colors[ChargeLevel];
+    }
 }
