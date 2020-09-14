@@ -46,7 +46,7 @@ public class Arrow : MonoBehaviour
                 hitObject.GetComponent<ShootableObject>()?.OnHit(this);
 
                 // sink the arrow a little deeper into the object we hit
-                LeanTween.move(gameObject, transform.position + transform.forward.normalized * stickDepth, 0.05f);
+                LeanTween.move(gameObject, transform.position + transform.forward.normalized * stickDepth, 0.02f);
 
                 // track the position of the object we hit
                 transform.SetParent(hitObject.transform);

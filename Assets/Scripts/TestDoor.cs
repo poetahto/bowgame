@@ -7,10 +7,15 @@ public class TestDoor : MonoBehaviour, ShootableObject
     public bool open = false;
     private float percentComplete = 0f;
     public float openDistance = 10f;
+    private Coroutine anim = null;
 
     public void OnHit(Arrow arrow)
     {
-        StartCoroutine(OpenDoor());
+        if (anim == null)
+        {
+            Debug.Log("start anim");
+            anim = StartCoroutine(OpenDoor());
+        }
     }
 
     private IEnumerator OpenDoor()
@@ -29,5 +34,6 @@ public class TestDoor : MonoBehaviour, ShootableObject
         }
 
         open = !open;
+        anim = null;
     }
 }
