@@ -151,7 +151,7 @@ public class Bow : MonoBehaviour
         }
     }
 
-    private void CollectArrows()
+    public void CollectArrows()
     {
         // destroy every arrow we've shot
         foreach (GameObject arrow in arrows)
