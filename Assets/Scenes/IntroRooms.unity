@@ -445,8 +445,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06d8d76735797dc47a4260dc18f909fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  acceptedChargeTypes: 01000000
+  moveSpeed: 1
   openDistance: 3
-  ignoreArrows: 1
   chargesNeededToOpen: 1
 --- !u!1 &74502422
 GameObject:
@@ -4936,7 +4937,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16392
+  m_Name: pb_Mesh16402
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -5416,8 +5417,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06d8d76735797dc47a4260dc18f909fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  acceptedChargeTypes: 01000000
+  moveSpeed: 1
   openDistance: 2
-  ignoreArrows: 1
   chargesNeededToOpen: 1
 --- !u!43 &364945459
 Mesh:
@@ -5425,7 +5427,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16170
+  m_Name: pb_Mesh16186
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -5588,7 +5590,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16150
+  m_Name: pb_Mesh16156
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -5817,7 +5819,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16096
+  m_Name: pb_Mesh16102
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -6007,8 +6009,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06d8d76735797dc47a4260dc18f909fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  acceptedChargeTypes: 00000000
+  moveSpeed: 1
   openDistance: 3
-  ignoreArrows: 0
   chargesNeededToOpen: 1
 --- !u!64 &585125140
 MeshCollider:
@@ -6469,7 +6472,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16190
+  m_Name: pb_Mesh16206
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -6632,7 +6635,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16110
+  m_Name: pb_Mesh16116
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -6822,8 +6825,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06d8d76735797dc47a4260dc18f909fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  acceptedChargeTypes: 01000000
+  moveSpeed: 1
   openDistance: 3
-  ignoreArrows: 1
   chargesNeededToOpen: 2
 --- !u!64 &670816414
 MeshCollider:
@@ -8297,8 +8301,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06d8d76735797dc47a4260dc18f909fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  acceptedChargeTypes: 01000000
+  moveSpeed: 1
   openDistance: 3
-  ignoreArrows: 1
   chargesNeededToOpen: 1
 --- !u!1 &768864721
 GameObject:
@@ -8393,9 +8398,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82086d2a90614ed449040475d51d0f7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  acceptedChargeTypes: 00000000
   targets:
   - {fileID: 19450615}
   inverseTargets: []
+  maxCharges: 1
 --- !u!65 &768864726
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8502,9 +8509,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82086d2a90614ed449040475d51d0f7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  acceptedChargeTypes: 00000000
   targets:
   - {fileID: 670816413}
   inverseTargets: []
+  maxCharges: 1
 --- !u!65 &784138810
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16328,9 +16337,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82086d2a90614ed449040475d51d0f7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  acceptedChargeTypes: 00000000
   targets:
   - {fileID: 755928193}
   inverseTargets: []
+  maxCharges: 1
 --- !u!1 &966007871
 GameObject:
   m_ObjectHideFlags: 0
@@ -25227,10 +25238,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82086d2a90614ed449040475d51d0f7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  acceptedChargeTypes: 00000000
   targets:
   - {fileID: 670816413}
   inverseTargets:
   - {fileID: 338890138}
+  maxCharges: 1
 --- !u!65 &1464281721
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -25369,7 +25382,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16408
+  m_Name: pb_Mesh16428
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -25532,7 +25545,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16268
+  m_Name: pb_Mesh16284
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -25722,8 +25735,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06d8d76735797dc47a4260dc18f909fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  acceptedChargeTypes: 00000000
+  moveSpeed: 1
   openDistance: 3
-  ignoreArrows: 0
   chargesNeededToOpen: 1
 --- !u!64 &1841210212
 MeshCollider:
@@ -26126,8 +26140,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06d8d76735797dc47a4260dc18f909fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  acceptedChargeTypes: 00000000
+  moveSpeed: 1
   openDistance: 2
-  ignoreArrows: 0
   chargesNeededToOpen: 1
 --- !u!64 &2025580832
 MeshCollider:
@@ -26588,7 +26603,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16218
+  m_Name: pb_Mesh16234
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

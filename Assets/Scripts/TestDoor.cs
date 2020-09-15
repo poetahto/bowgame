@@ -4,37 +4,38 @@ using UnityEngine;
 
 public class TestDoor : Chargeable
 {
-    public float openDistance = 10f;
-    public bool ignoreArrows = false;
-    public int chargesNeededToOpen = 1;
+    [Header("Door Settings")]
+    [SerializeField] private float moveSpeed = 1f;
+    [SerializeField] private float openDistance = 10f;
+    [SerializeField] private int chargesNeededToOpen = 1;
 
     private Vector3 openPosition;
     private Vector3 closedPosition;
 
     private DoorState state;
 
-    private List<Charge> charges;
-
     private Coroutine curCoroutine = null;
 
     private void Awake()
     {
-        charges = new List<Charge>();
         closedPosition = transform.position;
         openPosition = closedPosition + new Vector3(0f, openDistance, 0f);
-
     }
 
     private void Update()
     {
-        Debug.DrawLine(openPosition, closedPosition, Color.red);
+        Color lineColor = Color.clear;
+        if (state == DoorState.Opening) lineColor = Color.green;
+        if (state == DoorState.Closing) lineColor = Color.red;
 
-        if (charges.Count >= chargesNeededToOpen && state != DoorState.OPEN && state != DoorState.OPENING)
+        Debug.DrawLine(openPosition, closedPosition, lineColor);
+
+        if (charges.Count >= chargesNeededToOpen && state != DoorState.Open && state != DoorState.Opening)
         {
             if (curCoroutine != null) StopCoroutine(curCoroutine);
             curCoroutine = StartCoroutine(OpenDoor());
         }
-        else if (charges.Count <= 0 && state != DoorState.CLOSED && state != DoorState.CLOSING)
+        else if (charges.Count <= 0 && state != DoorState.Closed && state != DoorState.Closing)
         {
             if (curCoroutine != null) StopCoroutine(curCoroutine);
             curCoroutine = StartCoroutine(CloseDoor());
@@ -43,60 +44,39 @@ public class TestDoor : Chargeable
 
     private IEnumerator OpenDoor()
     {
-        var percentComplete = 0f;
+        state = DoorState.Opening;
+        
         Vector3 target = openPosition;
-
-        state = DoorState.OPENING;
 
         while (transform.position != target)
         {
-            percentComplete += Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * moveSpeed);
             yield return new WaitForEndOfFrame();
         }
 
-        state = DoorState.OPEN;
+        state = DoorState.Open;
     }
 
     private IEnumerator CloseDoor()
     {
-        var percentComplete = 0f;
-        Vector3 target = closedPosition;
+        state = DoorState.Closing;
 
-        state = DoorState.CLOSING;
+        Vector3 target = closedPosition;
 
         while (transform.position != target)
         {
-            percentComplete += Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * moveSpeed);
             yield return new WaitForEndOfFrame();
         }
 
-        state = DoorState.CLOSED;
-    }
-
-    public override void AddCharge(Charge charge)
-    {
-        if (!ignoreArrows)
-        { 
-            charges.Add(charge);
-        }
-        else if (!(charge is Arrow))
-        {
-            charges.Add(charge);
-        }
-    }
-
-    public override void RemoveCharge(Charge charge)
-    {
-        charges.Remove(charge);
+        state = DoorState.Closed;
     }
 
     private enum DoorState 
     {
-        CLOSED,
-        OPEN,
-        CLOSING,
-        OPENING
+        Closed,
+        Open,
+        Closing,
+        Opening
     }
 }

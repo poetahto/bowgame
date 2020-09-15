@@ -14,11 +14,11 @@ public class Arrow : MonoBehaviour, Charge
     private Chargeable curCharging = null;
 
     // this arrows rigidbody
-    private new Rigidbody rigidbody;
+    private Rigidbody rb;
 
     private void Awake()
     {
-        rigidbody = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
     }
 
     private void FixedUpdate()
@@ -26,10 +26,10 @@ public class Arrow : MonoBehaviour, Charge
         if (active)
         {
             Vector3 start = transform.position + transform.forward.normalized * 0.25f;
-            Vector3 target = transform.position + rigidbody.velocity.normalized;
+            Vector3 target = transform.position + rb.velocity.normalized;
             Debug.DrawLine(start, target);
 
-            transform.forward = rigidbody.velocity.normalized;
+            transform.forward = rb.velocity.normalized;
         }
     }
 
@@ -65,13 +65,13 @@ public class Arrow : MonoBehaviour, Charge
                 curCharging?.AddCharge(this);
 
                 // sink the arrow a little deeper into the object we hit
-                LeanTween.move(gameObject, transform.position + transform.forward.normalized * stickDepth, 0.02f);
+                LeanTween.move(gameObject, transform.position + transform.forward.normalized * stickDepth, 0.05f);
 
                 // track the position of the object we hit
                 transform.SetParent(hitObject.transform);
 
                 // freeze the arrow in place
-                Destroy(rigidbody);
+                Destroy(rb);
             }
         }
         // after this arrow has collided with something, it can no longer get stuck
