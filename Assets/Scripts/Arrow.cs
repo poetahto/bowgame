@@ -21,6 +21,18 @@ public class Arrow : MonoBehaviour, Charge
         rigidbody = GetComponent<Rigidbody>();
     }
 
+    private void FixedUpdate()
+    {
+        if (active)
+        {
+            Vector3 start = transform.position + transform.forward.normalized * 0.25f;
+            Vector3 target = transform.position + rigidbody.velocity.normalized;
+            Debug.DrawLine(start, target);
+
+            transform.forward = rigidbody.velocity.normalized;
+        }
+    }
+
     private void OnDestroy()
     {
         curCharging?.RemoveCharge(this);
