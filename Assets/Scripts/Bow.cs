@@ -70,7 +70,7 @@ public class Bow : MonoBehaviour
         style.alignment = TextAnchor.UpperRight;
         style.fontSize = h * 2 / 100;
         style.normal.textColor = Color.white;
-        string text = CurrentArrows + "";
+        string text = "Remaining arrows: " + CurrentArrows;
         GUI.Label(rect, text, style);
     }
 
