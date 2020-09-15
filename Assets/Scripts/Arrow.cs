@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Arrow : MonoBehaviour
+public class Arrow : MonoBehaviour, Charge
 {
     // how far the arrow will lodge itself into objects
     [SerializeField] private float stickDepth = .2f;
@@ -50,7 +50,6 @@ public class Arrow : MonoBehaviour
             {
                 // if the object we hit has a component that impliments ShootableObject, call it's OnHit method
                 curCharging = hitObject.GetComponent<Chargeable>();
-                curCharging?.OnHit();
                 curCharging?.AddCharge(this);
 
                 // sink the arrow a little deeper into the object we hit

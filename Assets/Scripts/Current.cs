@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface Triggerable
+public class Current : Charge
 {
-    void TriggerOn();
-    void TriggerOff();
+
 }

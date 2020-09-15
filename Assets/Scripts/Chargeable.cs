@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface Chargeable
+public abstract class Chargeable : MonoBehaviour
 {
-    void OnHit();
+    public abstract void AddCharge(Charge charge);
 
-    void AddCharge(Arrow arrow);
-
-    void RemoveCharge(Arrow arrow);
+    public abstract void RemoveCharge(Charge charge);
 }

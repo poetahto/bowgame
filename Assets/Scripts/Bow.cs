@@ -59,18 +59,33 @@ public class Bow : MonoBehaviour
         originalBarScale = chargeBar.transform.localScale;
     }
 
+    private void OnGUI()
+    {
+        // prints out the number of remaining arrows: replace with gui element later
+        int w = Screen.width, h = Screen.height;
+
+        GUIStyle style = new GUIStyle();
+
+        Rect rect = new Rect(0, 0, w, h * 2 / 100);
+        style.alignment = TextAnchor.UpperRight;
+        style.fontSize = h * 2 / 100;
+        style.normal.textColor = Color.white;
+        string text = CurrentArrows + "";
+        GUI.Label(rect, text, style);
+    }
+
     void Update()
     {
         UpdateChargeLevel();
 
         UpdateChargeBar();
 
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && CurrentArrows > 0)
         {
             StartCharging();
         }
 
-        if (Input.GetButtonUp("Fire1"))
+        if (Input.GetButtonUp("Fire1") && CurrentArrows > 0)
         {
             ReleaseArrow();
         }
@@ -85,52 +100,67 @@ public class Bow : MonoBehaviour
     {
         StopCharging();
 
-        int speed = arrowSpeeds[ChargeLevel];
-        var arrow = Instantiate(arrowPrefab);
-        var arrowRigidbody = arrow.GetComponent<Rigidbody>();
-
-        chargeStart = -1; //DEBUG
-
-        arrow.transform.SetParent(arrowGroup.transform);
+        // initialize arrow and its velocity, position, rotation, and parent
+        // TODO change to an object pooling method later?!
+        GameObject arrow = Instantiate(arrowPrefab);
+        Rigidbody arrowRigidbody = arrow.GetComponent<Rigidbody>();
+        
+        arrowRigidbody.velocity = (cameraTransform.forward.normalized * arrowSpeeds[ChargeLevel]);
         arrow.transform.position = characterTransform.position + (transform.forward.normalized * 0.5f) + (transform.up * 0.5f);
         arrow.transform.rotation = cameraTransform.rotation;
-        arrowRigidbody.velocity = (cameraTransform.forward.normalized * speed);
+        arrow.transform.SetParent(arrowGroup.transform);
 
+        // cache the arrow we just fired to a list, so we can destroy it later
         arrows.Add(arrow);
+
+        // Subtract the arrow we just shot from our total
+        CurrentArrows--;
     }
 
     private void StartCharging()
     {
-        chargeStart = Time.time;
-
         if (!charging)
         {
+            charging = true;
+
             chargingAnimation = LeanTween.scaleX(
                 chargeBar.gameObject,   // the object we are scaling
                 5,   // our target scale
                 speedLevel1Mills + speedLevel2Mills + speedLevel3Mills); // how long it will take to scale
 
-            charging = true;
+            chargeStart = Time.time;
         }
     }
 
     private void StopCharging()
     {
-        // stop the charging animation if it hasn't already finished
-        LeanTween.cancel(chargingAnimation.id);
-        var newScale = originalBarScale;
-        newScale.x = 0f;
-        chargeBar.transform.localScale = newScale;
-        chargeBar.color = colors[0];
-        charging = false;
+        if (charging)
+        {
+            charging = false;
+
+            // stop the charging animation if it hasn't already finished
+            LeanTween.cancel(chargingAnimation.id);
+
+            // set the scale to 0
+            var newScale = originalBarScale;
+            newScale.x = 0f;
+            chargeBar.transform.localScale = newScale;
+
+            // reset the color to its default
+            chargeBar.color = colors[0];
+        }
     }
 
     private void CollectArrows()
     {
+        // destroy every arrow we've shot
         foreach (GameObject arrow in arrows)
         {
             Destroy(arrow);
         }
+
+        // Refund all collected arrows
+        CurrentArrows = MaxArrows;
     }
 
     private void UpdateChargeLevel()

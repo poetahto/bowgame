@@ -2,31 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestDoor : MonoBehaviour, Chargeable
+public class TestDoor : Chargeable
 {
     public float openDistance = 10f;
+    public bool ignoreArrows = false;
+    public int chargesNeededToOpen = 1;
 
     private Vector3 openPosition;
     private Vector3 closedPosition;
 
     private DoorState state;
 
-    private List<Arrow> charges;
+    private List<Charge> charges;
 
     private Coroutine curCoroutine = null;
 
-    private void Start()
+    private void Awake()
     {
-        charges = new List<Arrow>();
+        charges = new List<Charge>();
         closedPosition = transform.position;
         openPosition = closedPosition + new Vector3(0f, openDistance, 0f);
+
     }
 
     private void Update()
     {
         Debug.DrawLine(openPosition, closedPosition, Color.red);
 
-        if (charges.Count > 1 && state != DoorState.OPEN && state != DoorState.OPENING)
+        if (charges.Count >= chargesNeededToOpen && state != DoorState.OPEN && state != DoorState.OPENING)
         {
             if (curCoroutine != null) StopCoroutine(curCoroutine);
             curCoroutine = StartCoroutine(OpenDoor());
@@ -72,17 +75,22 @@ public class TestDoor : MonoBehaviour, Chargeable
         state = DoorState.CLOSED;
     }
 
-    public void AddCharge(Arrow arrow)
+    public override void AddCharge(Charge charge)
     {
-        charges.Add(arrow);
+        if (!ignoreArrows)
+        { 
+            charges.Add(charge);
+        }
+        else if (!(charge is Arrow))
+        {
+            charges.Add(charge);
+        }
     }
 
-    public void RemoveCharge(Arrow arrow)
+    public override void RemoveCharge(Charge charge)
     {
-        charges.Remove(arrow);
+        charges.Remove(charge);
     }
-
-    public void OnHit() { }
 
     private enum DoorState 
     {
