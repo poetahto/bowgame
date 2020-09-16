@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 19450611}
   - component: {fileID: 19450610}
   - component: {fileID: 19450615}
+  - component: {fileID: 19450616}
   m_Layer: 0
   m_Name: R3Door
   m_TagString: Untagged
@@ -446,9 +447,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   acceptedChargeTypes: 01000000
-  moveSpeed: 1
+  moveSpeed: 2
   openDistance: 3
   chargesNeededToOpen: 1
+  targetPosition: {fileID: 0}
+--- !u!54 &19450616
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 19450609}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 3
 --- !u!1 &74502422
 GameObject:
   m_ObjectHideFlags: 0
@@ -3841,7 +3859,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 137685398}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalPosition: {x: 0.57618904, y: 2.1905951, z: -2.312004}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -4611,7 +4629,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16326
+  m_Name: pb_Mesh34874
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4774,7 +4792,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16314
+  m_Name: pb_Mesh34862
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4937,7 +4955,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16402
+  m_Name: pb_Mesh50770
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -5108,6 +5126,7 @@ GameObject:
   - component: {fileID: 338890134}
   - component: {fileID: 338890133}
   - component: {fileID: 338890138}
+  - component: {fileID: 338890139}
   m_Layer: 0
   m_Name: R4TrapDoor
   m_TagString: Untagged
@@ -5418,16 +5437,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   acceptedChargeTypes: 01000000
-  moveSpeed: 1
+  moveSpeed: 5
   openDistance: 2
   chargesNeededToOpen: 1
+  targetPosition: {fileID: 0}
+--- !u!54 &338890139
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338890132}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 3
 --- !u!43 &364945459
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16186
+  m_Name: pb_Mesh34718
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -5590,7 +5626,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16156
+  m_Name: pb_Mesh34688
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -5819,7 +5855,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16102
+  m_Name: pb_Mesh34634
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -5990,6 +6026,7 @@ GameObject:
   - component: {fileID: 585125141}
   - component: {fileID: 585125140}
   - component: {fileID: 585125139}
+  - component: {fileID: 585125145}
   m_Layer: 0
   m_Name: R2Door1
   m_TagString: Sticky
@@ -6010,9 +6047,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   acceptedChargeTypes: 00000000
-  moveSpeed: 1
+  moveSpeed: 2
   openDistance: 3
   chargesNeededToOpen: 1
+  targetPosition: {fileID: 0}
 --- !u!64 &585125140
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -6303,13 +6341,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &585125145
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 585125138}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 3
 --- !u!43 &619267223
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16132
+  m_Name: pb_Mesh34670
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -6472,7 +6526,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16206
+  m_Name: pb_Mesh34738
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -6635,7 +6689,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16116
+  m_Name: pb_Mesh34648
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -6806,6 +6860,7 @@ GameObject:
   - component: {fileID: 670816415}
   - component: {fileID: 670816414}
   - component: {fileID: 670816413}
+  - component: {fileID: 670816419}
   m_Layer: 0
   m_Name: R4EndDoor
   m_TagString: Untagged
@@ -6826,9 +6881,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   acceptedChargeTypes: 01000000
-  moveSpeed: 1
+  moveSpeed: 2
   openDistance: 3
   chargesNeededToOpen: 2
+  targetPosition: {fileID: 0}
 --- !u!64 &670816414
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -7119,6 +7175,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 26
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &670816419
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 670816412}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 3
 --- !u!1001 &682998241
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7992,6 +8064,7 @@ GameObject:
   - component: {fileID: 755928189}
   - component: {fileID: 755928188}
   - component: {fileID: 755928193}
+  - component: {fileID: 755928194}
   m_Layer: 0
   m_Name: R2Door2
   m_TagString: Untagged
@@ -8302,9 +8375,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   acceptedChargeTypes: 01000000
-  moveSpeed: 1
+  moveSpeed: 2
   openDistance: 3
   chargesNeededToOpen: 1
+  targetPosition: {fileID: 0}
+--- !u!54 &755928194
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 755928187}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 3
 --- !u!1 &768864721
 GameObject:
   m_ObjectHideFlags: 0
@@ -16440,7 +16530,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16302
+  m_Name: pb_Mesh34850
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -16643,17 +16733,17 @@ PrefabInstance:
     - target: {fileID: 5935400633468773216, guid: a91d1ad1131cd69468e0af292ea66d70,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.57618904
       objectReference: {fileID: 0}
     - target: {fileID: 5935400633468773216, guid: a91d1ad1131cd69468e0af292ea66d70,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 1.690595
       objectReference: {fileID: 0}
     - target: {fileID: 5935400633468773216, guid: a91d1ad1131cd69468e0af292ea66d70,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -2.312004
       objectReference: {fileID: 0}
     - target: {fileID: 5935400633468773216, guid: a91d1ad1131cd69468e0af292ea66d70,
         type: 3}
@@ -16709,6 +16799,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5935400633468773231, guid: a91d1ad1131cd69468e0af292ea66d70,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a91d1ad1131cd69468e0af292ea66d70, type: 3}
@@ -22979,7 +23074,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16206
+  m_Name: pb_Mesh34754
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -24892,7 +24987,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16256
+  m_Name: pb_Mesh34804
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -25382,7 +25477,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16428
+  m_Name: pb_Mesh34960
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -25545,7 +25640,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16284
+  m_Name: pb_Mesh34816
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -25716,6 +25811,7 @@ GameObject:
   - component: {fileID: 1841210213}
   - component: {fileID: 1841210212}
   - component: {fileID: 1841210211}
+  - component: {fileID: 1841210217}
   m_Layer: 0
   m_Name: R1Door1
   m_TagString: Sticky
@@ -25736,9 +25832,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   acceptedChargeTypes: 00000000
-  moveSpeed: 1
+  moveSpeed: 2
   openDistance: 3
   chargesNeededToOpen: 1
+  targetPosition: {fileID: 0}
 --- !u!64 &1841210212
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -26029,6 +26126,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1841210217
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1841210210}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 3
 --- !u!1 &1856146947
 GameObject:
   m_ObjectHideFlags: 0
@@ -26121,6 +26234,7 @@ GameObject:
   - component: {fileID: 2025580833}
   - component: {fileID: 2025580832}
   - component: {fileID: 2025580831}
+  - component: {fileID: 2025580837}
   m_Layer: 0
   m_Name: R4Platform
   m_TagString: Sticky
@@ -26144,6 +26258,7 @@ MonoBehaviour:
   moveSpeed: 1
   openDistance: 2
   chargesNeededToOpen: 1
+  targetPosition: {fileID: 0}
 --- !u!64 &2025580832
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -26434,13 +26549,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 24
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &2025580837
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025580830}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 3
 --- !u!43 &2060957192
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16356
+  m_Name: pb_Mesh34888
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -26603,7 +26734,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16234
+  m_Name: pb_Mesh34766
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

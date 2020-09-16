@@ -116,7 +116,8 @@ MonoBehaviour:
   maxSpeed: 4
   acceleration: 26
   airAcceleration: 5
-  maxAirJumps: 1
+  maxGroundAngle: 30
+  maxAirJumps: 0
 --- !u!54 &5935400633468773229
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -145,7 +146,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48e8be2816eb0074db1b252b69aeb316, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arrowGroup: {fileID: 0}
   cameraTransform: {fileID: 0}
   characterTransform: {fileID: 5935400633468773216}
   arrowPrefab: {fileID: 3568894789279159842, guid: 6629bfc42eb644c4d921dd31fdb3d3d2,
@@ -155,10 +155,12 @@ MonoBehaviour:
   speedLevel1: 16
   speedLevel2: 24
   speedLevel3: 40
-  speedLevel1Mills: 300
-  speedLevel2Mills: 800
-  speedLevel3Mills: 1500
+  speedLevel1Mills: 0.3
+  speedLevel2Mills: 0.8
+  speedLevel3Mills: 1.5
   colorLevel0: {r: 0.43867922, g: 1, b: 0.47632876, a: 1}
   colorLevel1: {r: 1, g: 0.9798859, b: 0.24056602, a: 1}
   colorLevel2: {r: 1, g: 0.5506502, b: 0.18396229, a: 1}
   colorLevel3: {r: 1, g: 0.23113209, b: 0.23113209, a: 1}
+  colors: []
+  arrowSpeeds: 

@@ -25,19 +25,27 @@ public class Player : MonoBehaviour
     //[Range(1f, 100f)]
     [SerializeField] private float acceleration = 26f, airAcceleration = 1f;
 
+    [Range(0f, 90f)]
+    [SerializeField] private float maxGroundAngle = 10f;
+
     [Range(0, 5)]
     [SerializeField] private float maxAirJumps = 0;
 
-    private int jumpPhase;
-    private bool onGround;
+    private bool OnGround => groundContactCount > 0;
     private bool desiredJump;
-    private Vector3 desiredVelocity;
-    private Vector3 velocity;
-    private Rigidbody body;
+    private int jumpPhase;
+    private int groundContactCount;
+    private float minGroundDotProduct;
+    private Rigidbody body, connectedBody, previousConnectedBody;
+    private Vector3 velocity, desiredVelocity, connectionVelocity;
+    private Vector3 contactNormal;
+    private Vector3 connectionWorldPosition, connectionLocalPosition;
+
 
     void Awake()
     {
         body = GetComponent<Rigidbody>();
+        OnValidate();
 
         // TODO move this code to a more intuitive location with more initialization stuff
         Cursor.lockState = CursorLockMode.Locked;
@@ -141,13 +149,7 @@ public class Player : MonoBehaviour
     {
         UpdateState();
 
-        // represents the most we will be able to change our velocity during this tick
-        float accel = onGround ? acceleration : airAcceleration;
-        float velocityChange = accel * Time.deltaTime;
-
-        // increment the velocity towards our desired velocity - acceleration effect
-        velocity.x = Mathf.MoveTowards(velocity.x, desiredVelocity.x, velocityChange);
-        velocity.z = Mathf.MoveTowards(velocity.z, desiredVelocity.z, velocityChange);
+        AdjustVelocity();
 
         if (desiredJump)
         {
@@ -157,12 +159,12 @@ public class Player : MonoBehaviour
 
         // change our player's position according to their velocity
         body.velocity = velocity;
-        onGround = false;
+        ClearState();
     }
 
     private void Jump()
     {
-        if (onGround || jumpPhase < maxAirJumps)
+        if (OnGround || jumpPhase < maxAirJumps)
         {
             if (velocity.y < 0)
             {
@@ -170,11 +172,12 @@ public class Player : MonoBehaviour
             }
             jumpPhase++;
             float jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * jumpHeight);
-            if (velocity.y > 0f)
+            float alignedSpeed = Vector3.Dot(velocity, contactNormal);
+            if (alignedSpeed > 0f)
             {
-                jumpSpeed = Mathf.Max(jumpSpeed - velocity.y, 0f);
+                jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
             }
-            velocity.y += jumpSpeed;
+            velocity += contactNormal * jumpSpeed;
         }
     }
 
@@ -206,16 +209,88 @@ public class Player : MonoBehaviour
         for (int i = 0; i < collision.contactCount; i++)
         {
             Vector3 normal = collision.GetContact(i).normal;
-            onGround |= normal.y >= 0.9f;
+            if (normal.y >= minGroundDotProduct)
+            {
+                groundContactCount += 1;
+                contactNormal += normal;
+                connectedBody = collision.rigidbody;
+            }
         }
     }
 
     private void UpdateState() 
     {
         velocity = body.velocity;
-        if (onGround)
+        if (OnGround)
         {
             jumpPhase = 0;
+            if (groundContactCount > 1)
+            { 
+                contactNormal.Normalize();
+            }
         }
+        else
+        {
+            contactNormal = Vector3.up;
+        }
+
+        if (connectedBody) 
+        {
+            if (connectedBody.isKinematic || connectedBody.mass >= body.mass)
+            { 
+                UpdateConnectionState();
+            }
+        }
+    }
+
+    private void UpdateConnectionState()
+    {
+        if (connectedBody == previousConnectedBody)
+        {
+            Vector3 connectionMovement =
+            connectedBody.transform.TransformPoint(connectionLocalPosition) - connectionWorldPosition;
+            connectionVelocity = connectionMovement / Time.deltaTime;
+        }
+        connectionWorldPosition = body.position;
+        connectionLocalPosition = connectedBody.transform.InverseTransformPoint(
+            connectionWorldPosition
+        );
+
+    }
+
+    private void ClearState()
+    {
+        groundContactCount = 0;
+        contactNormal = connectionVelocity = Vector3.zero;
+        previousConnectedBody = connectedBody;
+        connectedBody = null;
+    }
+
+    private void OnValidate()
+    {
+        minGroundDotProduct = Mathf.Cos(maxGroundAngle* Mathf.Deg2Rad);
+    }
+
+    private Vector3 ProjectOnContactPlane(Vector3 vector)
+    {
+        return vector - contactNormal * Vector3.Dot(vector, contactNormal);
+    }
+
+    private void AdjustVelocity()
+    {
+        Vector3 xAxis = ProjectOnContactPlane(Vector3.right).normalized;
+        Vector3 zAxis = ProjectOnContactPlane(Vector3.forward).normalized;
+
+        Vector3 relativeVelocity = velocity - connectionVelocity;
+        float currentX = Vector3.Dot(relativeVelocity, xAxis);
+        float currentZ = Vector3.Dot(relativeVelocity, zAxis);
+
+        float accel = OnGround ? acceleration : airAcceleration;
+        float maxSpeedChange = accel * Time.deltaTime;
+
+        float newX = Mathf.MoveTowards(currentX, desiredVelocity.x, maxSpeedChange);
+        float newZ = Mathf.MoveTowards(currentZ, desiredVelocity.z, maxSpeedChange);
+
+        velocity += xAxis * (newX - currentX) + zAxis * (newZ - currentZ);
     }
 }
