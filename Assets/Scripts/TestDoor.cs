@@ -13,7 +13,8 @@ public class TestDoor : Chargeable
     private Vector3 openPosition;
     private Vector3 closedPosition;
     private Rigidbody rb;
-    private bool obstructed = false;
+    private bool obstructed => obstructor != null;
+    private Collider obstructor = null;
 
     private DoorState state;
 
@@ -85,18 +86,15 @@ public class TestDoor : Chargeable
 
     private void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.tag == "Player" && col.GetContact(0).normal.y > 0.9f)
+        if (col.GetContact(0).normal.y > 0.9f)
         { 
-            obstructed = true;
+            obstructor = col.collider;
         }
     }
 
     private void OnCollisionExit(Collision col)
     {
-        if (col.gameObject.tag == "Player")
-        {
-            obstructed = false;
-        }
+        obstructor = null;
     }
 
     private enum DoorState 
