@@ -9,7 +9,9 @@ public class TestDoor : Chargeable
     [SerializeField] private float openDistance = 10f;
     [SerializeField] private int chargesNeededToOpen = 1;
     [SerializeField] private Transform targetPosition = null;
+    [SerializeField] private Transform visualizer = null;
 
+    private Vector3 visualizerOriginalScale = Vector3.one;
     private Vector3 openPosition;
     private Vector3 closedPosition;
     private Rigidbody rb;
@@ -22,6 +24,7 @@ public class TestDoor : Chargeable
 
     private void Awake()
     {
+        if (visualizer != null) visualizerOriginalScale = visualizer.localScale;
         rb = GetComponent<Rigidbody>();
         closedPosition = transform.position;
         openPosition = targetPosition == null ? closedPosition + new Vector3(0f, openDistance, 0f) : targetPosition.position;
@@ -44,6 +47,30 @@ public class TestDoor : Chargeable
         {
             if (curCoroutine != null) StopCoroutine(curCoroutine);
             curCoroutine = StartCoroutine(CloseDoor());
+        }
+    }
+
+    public override void AddCharge(Charge charge)
+    {
+        base.AddCharge(charge);
+
+        if (visualizer != null)
+        {
+            Vector3 targetScale = visualizerOriginalScale * (1f - ((float) charges.Count / (float) chargesNeededToOpen));
+            targetScale.z = visualizerOriginalScale.z;
+            ChangeSize(targetScale);
+        }
+    }
+
+    public override void RemoveCharge(Charge charge)
+    {
+        base.RemoveCharge(charge);
+
+        if (visualizer != null)
+        {
+            Vector3 targetScale = visualizerOriginalScale * (1f - ((float) charges.Count / (float) chargesNeededToOpen));
+            targetScale.z = visualizerOriginalScale.z;
+            ChangeSize(targetScale);
         }
     }
 
@@ -95,6 +122,14 @@ public class TestDoor : Chargeable
     private void OnCollisionExit(Collision col)
     {
         obstructor = null;
+    }
+
+    private void ChangeSize(Vector3 targetScale)
+    {
+        LeanTween.cancel(visualizer.gameObject);
+        LeanTween.scaleX(visualizer.gameObject, targetScale.x, 0.15f);
+        LeanTween.scaleY(visualizer.gameObject, targetScale.y, 0.15f);
+        LeanTween.scaleZ(visualizer.gameObject, targetScale.z, 0.15f);
     }
 
     private enum DoorState 
