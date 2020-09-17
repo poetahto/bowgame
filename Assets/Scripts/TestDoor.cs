@@ -56,7 +56,7 @@ public class TestDoor : Chargeable
 
         if (visualizer != null)
         {
-            Vector3 targetScale = visualizerOriginalScale * (1f - ((float) charges.Count / (float) chargesNeededToOpen));
+            Vector3 targetScale = visualizerOriginalScale * (1f - Mathf.Min((float)charges.Count / (float)chargesNeededToOpen, 1f));
             targetScale.z = visualizerOriginalScale.z;
             ChangeSize(targetScale);
         }
@@ -68,7 +68,7 @@ public class TestDoor : Chargeable
 
         if (visualizer != null)
         {
-            Vector3 targetScale = visualizerOriginalScale * (1f - ((float) charges.Count / (float) chargesNeededToOpen));
+            Vector3 targetScale = visualizerOriginalScale * (1f - Mathf.Min((float) charges.Count / (float) chargesNeededToOpen, 1f));
             targetScale.z = visualizerOriginalScale.z;
             ChangeSize(targetScale);
         }

@@ -12,6 +12,7 @@ public class Bow : MonoBehaviour
     [SerializeField] private Transform characterTransform = null;
     [SerializeField] private GameObject arrowPrefab = null;
     [SerializeField] private RawImage chargeBar = null;
+    [SerializeField] private int maxArrows = 6;
 
     [Header("Bow Properties")]
 
@@ -29,8 +30,8 @@ public class Bow : MonoBehaviour
     public Color colorLevel2;
     public Color colorLevel3;
 
-    public Color[] colors;
-    public int[] arrowSpeeds;
+    private Color[] colors;
+    private int[] arrowSpeeds;
 
     public int MaxArrows { get; set; }
     public int CurrentArrows { get; set; }
@@ -53,7 +54,7 @@ public class Bow : MonoBehaviour
         arrowGroup = new GameObject("Arrow Group");
         arrows = new List<GameObject>();
         ChargeLevel = 0;
-        MaxArrows = 10;
+        MaxArrows = maxArrows;
         CurrentArrows = MaxArrows;
         chargeBar.color = colorLevel0;
         originalBarScale = chargeBar.transform.localScale;
@@ -67,7 +68,7 @@ public class Bow : MonoBehaviour
         GUIStyle style = new GUIStyle();
 
         Rect rect = new Rect(0, 0, w, h * 2 / 100);
-        style.alignment = TextAnchor.UpperRight;
+        style.alignment = TextAnchor.UpperLeft;
         style.fontSize = h * 2 / 100;
         style.normal.textColor = Color.white;
         string text = "Remaining arrows: " + CurrentArrows;
