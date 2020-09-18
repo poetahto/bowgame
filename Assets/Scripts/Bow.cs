@@ -157,7 +157,10 @@ public class Bow : MonoBehaviour
         // destroy every arrow we've shot
         foreach (GameObject arrow in arrows)
         {
-            Destroy(arrow);
+            LeanTween.scale(arrow, Vector3.zero, 0.3f).setEaseInOutQuad().setOnComplete(()=> {
+                arrows.Remove(arrow);
+                Destroy(arrow);
+            });
         }
 
         // Refund all collected arrows

@@ -74,8 +74,7 @@ public class Acceptor : Chargeable
 
     public override void RemoveCharge(Charge charge)
     {
-        if (charges.Count >= maxCharges)
-        {
+        
             base.RemoveCharge(charge);
 
             foreach (var target in inverseTargets)
@@ -86,6 +85,6 @@ public class Acceptor : Chargeable
             {
                 target.RemoveCharge(current);
             }
-        }
+        
     }
 }
