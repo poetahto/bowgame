@@ -11,7 +11,7 @@ public class Arrow : MonoBehaviour, Charge
 
     // whether the arrow can currently get stuck in something
     private bool active = true;
-    private Chargeable curCharging = null;
+    private ChargeableObject curCharging = null;
 
     // this arrows rigidbody
     private Rigidbody rb;
@@ -61,7 +61,7 @@ public class Arrow : MonoBehaviour, Charge
             if (shouldStick)
             {
                 // if the object we hit has a component that impliments ShootableObject, call it's OnHit method
-                curCharging = hitObject.GetComponent<Chargeable>();
+                curCharging = hitObject.GetComponent<ChargeableObject>();
                 curCharging?.AddCharge(this);
 
                 // sink the arrow a little deeper into the object we hit

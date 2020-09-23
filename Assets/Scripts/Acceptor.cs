@@ -5,13 +5,13 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class Acceptor : Chargeable
+public class Acceptor : ChargeableObject
 {
     // TODO: is there a better way to handle the inverse targets? code smell
 
     [Header("Acceptor Settings")]
-    [SerializeField] private Chargeable[] targets = null;
-    [SerializeField] private Chargeable[] inverseTargets = null;
+    [SerializeField] private ChargeableObject[] targets = null;
+    [SerializeField] private ChargeableObject[] inverseTargets = null;
     [SerializeField] private int maxCharges = 1;
 
     private Current current;

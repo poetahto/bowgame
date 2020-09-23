@@ -2,7 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestDoor : Chargeable
+// Currently, the easiest way to restrict player progress.
+// Will move between two positions, defined by a height above its local position 
+// or by another Transform's position.
+
+// TODO improve pathing options, door will crush players when opening upwards
+
+public class Door : ChargeableObject
 {
     [Header("Door Settings")]
     [SerializeField] private float moveSpeed = 1f;
@@ -15,11 +21,13 @@ public class TestDoor : Chargeable
     private Vector3 openPosition;
     private Vector3 closedPosition;
     private Rigidbody rb;
-    private bool obstructed => obstructor != null;
+    private bool Obstructed => obstructor != null;
     private Collider obstructor = null;
 
     private DoorState state;
 
+    // Why use corourtines instead of an animation controller for handling the 
+    // door-movement process? Because I hate animation controllers.
     private Coroutine curCoroutine = null;
 
     private void Awake()
@@ -32,12 +40,16 @@ public class TestDoor : Chargeable
 
     private void Update()
     {
+        /// --- DEBUG STUFF ---
         Color lineColor = Color.clear;
+
         if (state == DoorState.Opening) lineColor = Color.green;
         if (state == DoorState.Closing) lineColor = Color.red;
 
         Debug.DrawLine(openPosition, closedPosition, lineColor);
+        /// --- DEBUG STUFF ---
 
+        // Update the door's state based on it's current charges.
         if (charges.Count >= chargesNeededToOpen && state != DoorState.Open && state != DoorState.Opening)
         {
             if (curCoroutine != null) StopCoroutine(curCoroutine);
@@ -53,25 +65,13 @@ public class TestDoor : Chargeable
     public override void AddCharge(Charge charge)
     {
         base.AddCharge(charge);
-
-        if (visualizer != null)
-        {
-            Vector3 targetScale = visualizerOriginalScale * (1f - Mathf.Min((float)charges.Count / (float)chargesNeededToOpen, 1f));
-            targetScale.z = visualizerOriginalScale.z;
-            ChangeSize(targetScale);
-        }
+        UpdateVisualizerScale();
     }
 
     public override void RemoveCharge(Charge charge)
     {
         base.RemoveCharge(charge);
-
-        if (visualizer != null)
-        {
-            Vector3 targetScale = visualizerOriginalScale * (1f - Mathf.Min((float) charges.Count / (float) chargesNeededToOpen, 1f));
-            targetScale.z = visualizerOriginalScale.z;
-            ChangeSize(targetScale);
-        }
+        UpdateVisualizerScale();
     }
 
     private IEnumerator OpenDoor()
@@ -82,7 +82,7 @@ public class TestDoor : Chargeable
 
         while (transform.position != target)
         {
-            if (!obstructed)
+            if (!Obstructed)
             {
                 rb.MovePosition(Vector3.MoveTowards(transform.position, target, Time.fixedDeltaTime * moveSpeed));
             }
@@ -101,7 +101,7 @@ public class TestDoor : Chargeable
 
         while (transform.position != target)
         {
-            if (!obstructed)
+            if (!Obstructed)
             { 
                 rb.MovePosition(Vector3.MoveTowards(transform.position, target, Time.fixedDeltaTime * moveSpeed));
             }
@@ -109,6 +109,17 @@ public class TestDoor : Chargeable
         }
 
         state = DoorState.Closed;
+    }
+    private void UpdateVisualizerScale()
+    {
+        if (visualizer != null)
+        {
+            // The target scale of the visualizer is inversely proportional to the percent-unlocked the door is.
+            // In other words, more charges -> smaller size of the visualizer
+            Vector3 targetScale = visualizerOriginalScale * (1f - Mathf.Min((float)charges.Count / chargesNeededToOpen, 1f));
+            targetScale.z = visualizerOriginalScale.z;
+            AnimationHelper.ChangeSize(visualizer.gameObject, targetScale, 0.15f);
+        }
     }
 
     private void OnCollisionEnter(Collision col)
@@ -122,14 +133,6 @@ public class TestDoor : Chargeable
     private void OnCollisionExit(Collision col)
     {
         obstructor = null;
-    }
-
-    private void ChangeSize(Vector3 targetScale)
-    {
-        LeanTween.cancel(visualizer.gameObject);
-        LeanTween.scaleX(visualizer.gameObject, targetScale.x, 0.15f);
-        LeanTween.scaleY(visualizer.gameObject, targetScale.y, 0.15f);
-        LeanTween.scaleZ(visualizer.gameObject, targetScale.z, 0.15f);
     }
 
     private enum DoorState 

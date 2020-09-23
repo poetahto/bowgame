@@ -11,7 +11,7 @@ public enum ChargeType
     Current
 }
 
-public abstract class Chargeable : MonoBehaviour
+public abstract class ChargeableObject : MonoBehaviour
 {
     [Header("Chargeable Settings")]
     [SerializeField] private ChargeType[] acceptedChargeTypes = new ChargeType[0];
