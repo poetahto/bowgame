@@ -83,4 +83,9 @@ public class Arrow : MonoBehaviour, Charge
         // after this arrow has collided with something, it can no longer get stuck
         active = false;
     }
+
+    public ChargeType Type()
+    {
+        return ChargeType.Arrow;
+    }
 }

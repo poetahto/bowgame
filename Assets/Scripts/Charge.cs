@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface Charge
+// An object that can be used as a power source for other objects
+public interface Charge 
 {
-    
+    ChargeType Type();
 }

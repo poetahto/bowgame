@@ -4,5 +4,8 @@ using UnityEngine;
 
 public class Current : Charge
 {
-
+    public ChargeType Type()
+    {
+        return ChargeType.Current;
+    }
 }

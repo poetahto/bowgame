@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// Note; scene enums should be ordered corresponding to their build order
 public enum Scene
 { 
     IntroLevel
 }
 
+// Kinda lame singleton for handling game logic related stuff,
+// such as loading levels (make async later)
 public class GameManager : MonoBehaviour
 {
     void Start()

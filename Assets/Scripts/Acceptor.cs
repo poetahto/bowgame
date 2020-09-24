@@ -5,6 +5,9 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
 
+// Also called a button. Accepts charges, and can distribute Current to 
+// linked objects in order to power them.
+
 public class Acceptor : ChargeableObject
 {
     // TODO: is there a better way to handle the inverse targets? code smell
@@ -21,6 +24,8 @@ public class Acceptor : ChargeableObject
         current = new Current();
     }
 
+    // note: below stuff is debug only, and would normally cause builds
+    // to fail - hence the if block
 #if (UNITY_EDITOR)
     private void OnDrawGizmos()
     {
@@ -29,6 +34,7 @@ public class Acceptor : ChargeableObject
             charges.Count,
             maxCharges);
 
+        // Labels are a super easy way to display debug text in world space 
         Handles.Label(transform.position, message);
 
         Handles.color = Color.clear;

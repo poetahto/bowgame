@@ -6,6 +6,10 @@ using System.Collections;
  * 
  * @Author Dave Hampson
 **/
+
+// note: I didn't make this class, just yoinked it from somebodies github but its super
+// nice for testing, especially cus unity doesn't display the correct fps in stats
+
 public class FPSDisplay : MonoBehaviour {
     float deltaTime = 0.0f;
 

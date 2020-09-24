@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Really basic script for removing arrows when a player collides.
+// add a bit of abstraction to this class later (like a trigger wrapper class)
+
 public class ArrowRemover : MonoBehaviour
 {
-    // Start is called before the first frame update
     private void OnTriggerExit(Collider collider)
     {
         //Checks to see if the object leaving is the player
