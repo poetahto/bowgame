@@ -17,23 +17,24 @@ public class Door : ChargeableObject
     [SerializeField] private Transform targetPosition = null;
     [SerializeField] private Transform visualizer = null;
 
-    private Vector3 visualizerOriginalScale = Vector3.one;
-    private Vector3 openPosition;
-    private Vector3 closedPosition;
-    private Rigidbody rb;
     private bool Obstructed => obstructor != null;
-    private Collider obstructor = null;
-
+    private Collider obstructor;
+    private Vector3 visualizerOriginalScale;
+    private Vector3 openPosition, closedPosition;
+    private Rigidbody rb;
     private DoorState state;
 
     // Why use corourtines instead of an animation controller for handling the 
     // door-movement process? Because I hate animation controllers.
-    private Coroutine curCoroutine = null;
+    private Coroutine curCoroutine;
 
     private void Awake()
     {
+        // Save the visualizer's original scale to help with the scaling process
         if (visualizer != null) visualizerOriginalScale = visualizer.localScale;
+
         rb = GetComponent<Rigidbody>();
+        
         closedPosition = transform.position;
         openPosition = targetPosition == null ? closedPosition + new Vector3(0f, openDistance, 0f) : targetPosition.position;
     }
@@ -78,17 +79,7 @@ public class Door : ChargeableObject
     {
         state = DoorState.Opening;
         
-        Vector3 target = openPosition;
-
-        while (transform.position != target)
-        {
-            if (!Obstructed)
-            {
-                rb.MovePosition(Vector3.MoveTowards(transform.position, target, Time.fixedDeltaTime * moveSpeed));
-            }
-
-            yield return new WaitForEndOfFrame();
-        }
+        yield return MoveDoorToPosition(openPosition);
 
         state = DoorState.Open;
     }
@@ -97,28 +88,36 @@ public class Door : ChargeableObject
     {
         state = DoorState.Closing;
 
-        Vector3 target = closedPosition;
-
-        while (transform.position != target)
-        {
-            if (!Obstructed)
-            { 
-                rb.MovePosition(Vector3.MoveTowards(transform.position, target, Time.fixedDeltaTime * moveSpeed));
-            }
-            yield return new WaitForEndOfFrame();
-        }
+        yield return MoveDoorToPosition(closedPosition);
 
         state = DoorState.Closed;
     }
+
+    private IEnumerator MoveDoorToPosition(Vector3 target)
+    {
+        while (transform.position != target)
+        {
+            if (!Obstructed)
+            {
+                rb.MovePosition(
+                    Vector3.MoveTowards(transform.position, target, Time.fixedDeltaTime * moveSpeed));
+            }
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
     private void UpdateVisualizerScale()
     {
+        // The target scale of the visualizer is inversely proportional to the percent-unlocked
+        // the door is. In other words, more charges -> smaller size of the visualizer
+
         if (visualizer != null)
         {
-            // The target scale of the visualizer is inversely proportional to the percent-unlocked the door is.
-            // In other words, more charges -> smaller size of the visualizer
-            Vector3 targetScale = visualizerOriginalScale * (1f - Mathf.Min((float)charges.Count / chargesNeededToOpen, 1f));
-            targetScale.z = visualizerOriginalScale.z;
-            AnimationHelper.ChangeSize(visualizer.gameObject, targetScale, 0.15f);
+            Vector3 targetScale = visualizerOriginalScale * 
+                (1f - Mathf.Min((float) charges.Count / chargesNeededToOpen, 1f));
+
+            AnimationHelper.ChangeSize(visualizer.gameObject, 
+                targetScale.x, targetScale.y, visualizerOriginalScale.z, 0.15f);
         }
     }
 

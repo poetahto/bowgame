@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Wrapper class for all our LeanTween needs.
+// Wrapper class for all our LeanTween needs. LeanTween is a library
+// for helping animate different properties of GameObjects, and is 
+// especially efficient for animating UI elements.
+
 public class AnimationHelper
 {
     // Scales target game object to the desired size.

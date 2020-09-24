@@ -10,15 +10,21 @@ public enum Scene
 
 public class GameManager : MonoBehaviour
 {
-
     void Start()
     {
-          
+        InitializeSettings();
     }
 
-    public static void RestartLevel(Scene scene)
+    private void InitializeSettings()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        Application.targetFrameRate = -1;
+        QualitySettings.vSyncCount = 0;
+    }
+
+    public static void LoadLevel(Scene scene)
     {
         SceneManager.LoadScene((int) scene);
     }
-
 }
