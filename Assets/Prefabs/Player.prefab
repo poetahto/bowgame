@@ -30,7 +30,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5935400633468773231}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.224, y: 1.158, z: 0.59}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -151,6 +151,7 @@ MonoBehaviour:
   arrowPrefab: {fileID: 3568894789279159842, guid: 6629bfc42eb644c4d921dd31fdb3d3d2,
     type: 3}
   chargeBar: {fileID: 0}
+  maxArrows: 6
   speedLevel0: 4
   speedLevel1: 16
   speedLevel2: 24
@@ -162,5 +163,3 @@ MonoBehaviour:
   colorLevel1: {r: 1, g: 0.9798859, b: 0.24056602, a: 1}
   colorLevel2: {r: 1, g: 0.5506502, b: 0.18396229, a: 1}
   colorLevel3: {r: 1, g: 0.23113209, b: 0.23113209, a: 1}
-  colors: []
-  arrowSpeeds: 

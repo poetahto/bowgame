@@ -11,6 +11,8 @@ public class Arrow : MonoBehaviour, Charge
 
     // whether the arrow can currently get stuck in something
     private bool active = true;
+
+    // the object this arrow is currently charging
     private ChargeableObject curCharging = null;
 
     // this arrows rigidbody
@@ -25,16 +27,20 @@ public class Arrow : MonoBehaviour, Charge
     {
         if (active)
         {
+            /// --- DEBUG STUFF ---
             Vector3 start = transform.position + transform.forward.normalized * 0.25f;
             Vector3 target = transform.position + rb.velocity.normalized;
             Debug.DrawLine(start, target);
+            /// --- DEBUG STUFF ---
 
+            // makes the arrow face the direction it is moving
             transform.forward = rb.velocity.normalized;
         }
     }
 
     private void OnDestroy()
     {
+        // if we are powering an object, unpower it when this is destroyed
         curCharging?.RemoveCharge(this);
     }
 
