@@ -13,7 +13,7 @@ using UnityEngine;
 
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : MonoBehaviour
+public abstract class ControllableObject : MonoBehaviour
 {
     [Header("GameObject References")]
 
@@ -22,23 +22,13 @@ public class Player : MonoBehaviour
 
     [Header("Movement Properties")]
 
-    //[Range(1f, 10f)]
-    [SerializeField] private float jumpHeight = 2f;
-
-    //[Range(1f, 10f)]
+    [Range(1f, 10f)]
     [SerializeField] private float mouseSensitivity = 3f;
-
-    //[Range(1f, 100f)]
-    [SerializeField] private float maxSpeed = 4f;
-
-    //[Range(1f, 100f)]
-    [SerializeField] private float acceleration = 26f, airAcceleration = 1f;
 
     [Range(0f, 90f)]
     [SerializeField] private float maxGroundAngle = 10f;
 
-    [Range(0, 5)]
-    [SerializeField] private float maxAirJumps = 0;
+    public abstract ControllableProperties Properties { get; }
 
     private bool OnGround => groundContactCount > 0;
     private bool desiredJump;
@@ -150,7 +140,7 @@ public class Player : MonoBehaviour
         desiredJump |= Input.GetButtonDown("Jump");
 
         // convert player's input into a 3D vector that represents a target velocity
-        desiredVelocity = (transform.right * playerInput.x + transform.forward * playerInput.y) * maxSpeed;
+        desiredVelocity = (transform.right * playerInput.x + transform.forward * playerInput.y) * Properties.MaxSpeed;
     }
 
     private void UpdateVelocity()
@@ -186,7 +176,7 @@ public class Player : MonoBehaviour
         Vector3 relativeVelocity = velocity - connectionVelocity;
 
         // Adjusts our acceleration based on whether we are grounded or not
-        float accel = OnGround ? acceleration : airAcceleration;
+        float accel = OnGround ? Properties.GroundAcceleration : Properties.AirAcceleration;
         float maxSpeedChange = accel * Time.deltaTime;
 
         // Represents the x and z components of our current velocity
@@ -204,14 +194,14 @@ public class Player : MonoBehaviour
 
     private void Jump()
     {
-        if (OnGround || usedJumps < maxAirJumps)
+        if (OnGround || usedJumps < Properties.MaxAirJumps)
         {
             // QOL for making double jumps work against gravity
             if (velocity.y < 0) velocity.y = 0;
 
             // Some physics equation or something for realistic jump speed?? It works but
             // we don't really care about scientific accuracy here, so maybe change later
-            float jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * jumpHeight);
+            float jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * Properties.JumpHeight);
 
             // Represents the player's current speed in the y direction away from the surface they are standing on
             float alignedSpeed = Vector3.Dot(velocity, contactNormal);

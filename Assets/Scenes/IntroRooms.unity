@@ -16289,6 +16289,34 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &785317896 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5935400633468773231, guid: a91d1ad1131cd69468e0af292ea66d70,
+    type: 3}
+  m_PrefabInstance: {fileID: 1097247193}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &785317899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 785317896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c7bc2addf2a57c418942d9e90cf2c07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraTransform: {fileID: 137685401}
+  characterTransform: {fileID: 785317903}
+  mouseSensitivity: 3
+  maxGroundAngle: 10
+--- !u!4 &785317903 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5935400633468773216, guid: a91d1ad1131cd69468e0af292ea66d70,
+    type: 3}
+  m_PrefabInstance: {fileID: 1097247193}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &812213609
 GameObject:
   m_ObjectHideFlags: 0
@@ -25839,7 +25867,8 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5935400633468773228, guid: a91d1ad1131cd69468e0af292ea66d70, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a91d1ad1131cd69468e0af292ea66d70, type: 3}
 --- !u!43 &1103925860
 Mesh:

@@ -24,11 +24,6 @@ public abstract class ChargeableObject : MonoBehaviour
     // stores all of the charges this object currently has (arrows, current ect)
     protected List<Charge> charges = new List<Charge>();
 
-    private void Start()
-    {
-        DebugUtil.AddMessage(gameObject, gameObject.name);
-    }
-
     public virtual void AddCharge(Charge charge)
     {
         if (acceptedChargeTypes.Contains(charge.Type()))

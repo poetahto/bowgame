@@ -116,7 +116,7 @@ public class Door : ChargeableObject
             Vector3 targetScale = visualizerOriginalScale * 
                 (1f - Mathf.Min((float) charges.Count / chargesNeededToOpen, 1f));
 
-            AnimationHelper.ChangeSize(visualizer.gameObject, 
+            AnimationUtil.ChangeSize(visualizer.gameObject, 
                 targetScale.x, targetScale.y, visualizerOriginalScale.z, 0.15f);
         }
     }
