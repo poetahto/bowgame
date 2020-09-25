@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,6 +14,8 @@ public enum Scene
 // such as loading levels (make async later)
 public class GameManager : MonoBehaviour
 {
+    public ControllableObject startingObject = null;
+
     void Start()
     {
         InitializeSettings();

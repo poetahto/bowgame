@@ -77,23 +77,26 @@ public class Bow : MonoBehaviour
 
     void Update()
     {
-        UpdateChargeLevel();
-
-        UpdateChargeBar();
-
-        if (Input.GetButtonDown("Fire1") && CurrentArrows > 0)
+        if (Controller.instance.currentlyControlling.GetComponent<Bow>() != null)
         {
-            StartCharging();
-        }
+            UpdateChargeLevel();
 
-        if (Input.GetButtonUp("Fire1") && CurrentArrows > 0)
-        {
-            ReleaseArrow();
-        }
+            UpdateChargeBar();
 
-        if (Input.GetButtonDown("Fire2"))
-        {
-            CollectArrows();
+            if (Input.GetButtonDown("Fire1") && CurrentArrows > 0)
+            {
+                StartCharging();
+            }
+
+            if (Input.GetButtonUp("Fire1") && CurrentArrows > 0)
+            {
+                ReleaseArrow();
+            }
+
+            if (Input.GetButtonDown("Fire2"))
+            {
+                CollectArrows();
+            }
         }
     }
 

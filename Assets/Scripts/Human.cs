@@ -2,28 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct ControllableProperties
-{
-    public float JumpHeight;
-    public float MaxSpeed;
-    public float GroundAcceleration;
-    public float AirAcceleration;
-    public float MaxAirJumps;
-}
-
 public class Human : ControllableObject
 {
-    public override ControllableProperties Properties { 
-        get 
-        {
-            ControllableProperties prop;
-            prop.JumpHeight = 1f;
-            prop.MaxSpeed = 4f;
-            prop.GroundAcceleration = 26f;
-            prop.AirAcceleration = 4f;
-            prop.MaxAirJumps = 0f;
+    private ControllableProperties _properties;
+    public override ControllableProperties Properties { get { return _properties; } }
 
-            return prop; 
-        } 
+    private void Awake()
+    {
+        _properties.JumpHeight = 1f;
+        _properties.MaxSpeed = 4f;
+        _properties.GroundAcceleration = 26f;
+        _properties.AirAcceleration = 4f;
+        _properties.MaxAirJumps = 0f;
+        _properties.MaxGroundAngle = 30f;
+        _properties.CameraOffset = new Vector3(0f, 0.5f, 0f);
     }
 }
