@@ -69,7 +69,7 @@ public abstract class ControllableObject : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            GameManager.LoadLevel(Scene.IntroLevel);
+            GameManager.LoadLevel(Scene.Test);
         }
 
         if (Input.GetKeyDown(KeyCode.E))
@@ -152,6 +152,11 @@ public abstract class ControllableObject : MonoBehaviour
 
     private void Jump()
     {
+        if (Properties.MaxAirJumps < 0)
+        {
+            return;
+        }
+
         if (OnGround || usedJumps < Properties.MaxAirJumps)
         {
             // QOL for making double jumps work against gravity

@@ -7,7 +7,8 @@ using UnityEngine.SceneManagement;
 // Note; scene enums should be ordered corresponding to their build order
 public enum Scene
 { 
-    IntroLevel
+    IntroLevel,
+    Test
 }
 
 // Kinda lame singleton for handling game logic related stuff,

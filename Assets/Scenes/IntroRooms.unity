@@ -10060,12 +10060,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c7bc2addf2a57c418942d9e90cf2c07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!54 &368592219 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 5935400633468773229, guid: a91d1ad1131cd69468e0af292ea66d70,
-    type: 3}
-  m_PrefabInstance: {fileID: 1097247193}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &376947270
 Mesh:
   m_ObjectHideFlags: 0
@@ -25760,18 +25754,6 @@ PrefabInstance:
       propertyPath: chargeBar
       value: 
       objectReference: {fileID: 1946864035}
-    - target: {fileID: 785317899, guid: a91d1ad1131cd69468e0af292ea66d70, type: 3}
-      propertyPath: cameraTransform
-      value: 
-      objectReference: {fileID: 137685401}
-    - target: {fileID: 785317899, guid: a91d1ad1131cd69468e0af292ea66d70, type: 3}
-      propertyPath: controller
-      value: 
-      objectReference: {fileID: 137685403}
-    - target: {fileID: 785317899, guid: a91d1ad1131cd69468e0af292ea66d70, type: 3}
-      propertyPath: body
-      value: 
-      objectReference: {fileID: 368592219}
     - target: {fileID: 5935400633468773216, guid: a91d1ad1131cd69468e0af292ea66d70,
         type: 3}
       propertyPath: m_LocalPosition.x

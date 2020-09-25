@@ -33,11 +33,15 @@ public class Controller : MonoBehaviour
     {
         if (obj != null)
         {
-            cameraMoveSpeed = 0.25f;
-            Invoke("ResetSpeed", 0.5f);
             currentlyControlling.DetachController();
             currentlyControlling = obj;
-            obj.AttachController(this);
+
+            Time.timeScale = 0.5f;
+            LeanTween.cancel(gameObject, true);
+            LeanTween.move(gameObject, currentlyControlling.transform.position + currentlyControlling.Properties.CameraOffset, 0.25f).setEaseInOutSine().setOnComplete(() => {
+                obj.AttachController(this);
+                Time.timeScale = 1f;
+            });
         }
     }
 
