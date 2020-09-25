@@ -19,34 +19,28 @@ public abstract class ChargeableObject : MonoBehaviour
 {
     [Header("Chargeable Settings")]
     // The types of charges this object can accept (use case: make doors ignore arrows)
-    [SerializeField] private ChargeType[] acceptedChargeTypes = new ChargeType[0];
+    [SerializeField] private ChargeType[] acceptedChargeTypes = new ChargeType[1] { ChargeType.Arrow };
     
     // stores all of the charges this object currently has (arrows, current ect)
     protected List<Charge> charges = new List<Charge>();
 
-    // TODO honestly, come up with a big singleton class for debug helper methods
-    // they dont really belong here or in the Acceptor class
-#if (UNITY_EDITOR)
-    private void OnDrawGizmos()
+    private void Start()
     {
-        String message = String.Format("{0}\nCharges: {1}", 
-            gameObject.name,
-            charges.Count);
-
-        Handles.Label(transform.position, message);
+        DebugUtil.AddMessage(gameObject, gameObject.name);
     }
-#endif
 
     public virtual void AddCharge(Charge charge)
     {
         if (acceptedChargeTypes.Contains(charge.Type()))
         {
+            DebugUtil.AddMessage(gameObject, charge.Type().ToString());
             charges.Add(charge);
         }
     }
 
     public virtual void RemoveCharge(Charge charge)
     {
+        DebugUtil.ClearMessage(gameObject, charge.Type().ToString());
         charges.Remove(charge);
     }
 }
