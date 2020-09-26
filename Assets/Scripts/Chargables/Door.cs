@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 // Currently, the easiest way to restrict player progress.
@@ -8,8 +9,7 @@ using UnityEngine;
 
 // TODO improve pathing options, door will crush players when opening upwards
 
-[ExecuteInEditMode]
-public class Door : ChargeableObject
+public class Door : MonoBehaviour, IChargeableObject
 {
     [Header("Door Settings")]
     [SerializeField] private float moveSpeed = 1f;
@@ -17,6 +17,7 @@ public class Door : ChargeableObject
     [SerializeField] private int chargesNeededToOpen = 1;
     [SerializeField] private Transform targetPosition = null;
     [SerializeField] private Transform visualizer = null;
+    [SerializeField] private ChargeType[] acceptedChargeTypes = null;
 
     private bool Obstructed => obstructor != null;
     private Collider obstructor;
@@ -24,6 +25,7 @@ public class Door : ChargeableObject
     private Vector3 openPosition, closedPosition;
     private Rigidbody rb;
     private DoorState state;
+    private List<Charge> charges;
 
     // Why use corourtines instead of an animation controller for handling the 
     // door-movement process? Because I hate animation controllers.
@@ -35,6 +37,7 @@ public class Door : ChargeableObject
         if (visualizer != null) visualizerOriginalScale = visualizer.localScale;
 
         rb = GetComponent<Rigidbody>();
+        charges = new List<Charge>();
         
         closedPosition = transform.position;
         openPosition = targetPosition == null ? closedPosition + new Vector3(0f, openDistance, 0f) : targetPosition.position;
@@ -70,15 +73,18 @@ public class Door : ChargeableObject
         }
     }
 
-    public override void AddCharge(Charge charge)
+    public void AddCharge(Charge charge)
     {
-        base.AddCharge(charge);
-        UpdateVisualizerScale();
+        if (acceptedChargeTypes.Contains(charge.Type()))
+        {
+            charges.Add(charge);
+            UpdateVisualizerScale();
+        }
     }
 
-    public override void RemoveCharge(Charge charge)
+    public void RemoveCharge(Charge charge)
     {
-        base.RemoveCharge(charge);
+        charges.Remove(charge);
         UpdateVisualizerScale();
     }
 
@@ -139,6 +145,11 @@ public class Door : ChargeableObject
     private void OnCollisionExit(Collision col)
     {
         obstructor = null;
+    }
+
+    public ChargeType[] AcceptedChargeTypes()
+    {
+        return acceptedChargeTypes;
     }
 
     private enum DoorState 

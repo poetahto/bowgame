@@ -16,6 +16,7 @@ using UnityEngine;
 public abstract class ControllableObject : MonoBehaviour
 {
     public Controller Controller { get; set; }
+    public bool IsControlled => Controller != null;
     public Rigidbody body;
 
     public abstract ControllableProperties Properties { get; }
@@ -259,12 +260,12 @@ public abstract class ControllableObject : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    protected void OnCollisionEnter(Collision collision)
     {
         EvaluateCollision(collision);
     }
 
-    private void OnCollisionStay(Collision collision)
+    protected void OnCollisionStay(Collision collision)
     {
         EvaluateCollision(collision);
     }
@@ -293,12 +294,14 @@ public abstract class ControllableObject : MonoBehaviour
 
     public void DetachController()
     {
+        gameObject.layer = 8;
         Controller = null;
         desiredVelocity = Vector3.zero;
     }
 
     public void AttachController(Controller controller)
     {
+        gameObject.layer = 9;
         Controller = controller;
     }
 }

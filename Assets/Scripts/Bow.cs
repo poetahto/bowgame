@@ -67,11 +67,11 @@ public class Bow : MonoBehaviour
             {
                 ReleaseArrow();
             }
+        }
 
-            if (Input.GetButtonDown("Fire2"))
-            {
-                CollectArrows();
-            }
+        if (Input.GetButtonDown("Fire2"))
+        {
+            CollectArrows();
         }
     }
 
