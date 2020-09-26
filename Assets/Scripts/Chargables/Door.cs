@@ -8,6 +8,7 @@ using UnityEngine;
 
 // TODO improve pathing options, door will crush players when opening upwards
 
+[ExecuteInEditMode]
 public class Door : ChargeableObject
 {
     [Header("Door Settings")]
@@ -39,10 +40,16 @@ public class Door : ChargeableObject
         openPosition = targetPosition == null ? closedPosition + new Vector3(0f, openDistance, 0f) : targetPosition.position;
     }
 
+    private void OnValidate()
+    {
+        closedPosition = transform.position;
+        openPosition = targetPosition == null ? closedPosition + new Vector3(0f, openDistance, 0f) : targetPosition.position;
+    }
+
     private void Update()
     {
         /// --- DEBUG STUFF ---
-        Color lineColor = Color.clear;
+        Color lineColor = Color.white;
 
         if (state == DoorState.Opening) lineColor = Color.green;
         if (state == DoorState.Closing) lineColor = Color.red;
