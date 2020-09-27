@@ -13,7 +13,7 @@ public class Arrow : MonoBehaviour, Charge
     private bool active = true;
 
     // the object this arrow is currently charging
-    private ChargeableObject curCharging = null;
+    private IChargeableObject curCharging = null;
 
     // this arrows rigidbody
     private Rigidbody rb;
@@ -50,9 +50,20 @@ public class Arrow : MonoBehaviour, Charge
         GameObject hitObject = collision.gameObject;
 
         // make sure the arrow never collides with the player
-        if (hitObject.tag == "Player") return;
+        if (hitObject.transform.position == Controller.instance.currentlyControlling.transform.position)
+        {
+            return;
+        }
 
-        if (hitObject.tag == "Sticky" && active)
+        /*
+        if (hitObject.layer == 8)
+        {
+            ControllableObject obj = hitObject.transform.GetComponent<ControllableObject>();
+            Controller.instance.AttachTo(obj);
+        }
+        */
+
+        if (hitObject.CompareTag("Sticky") && active)
         {
             bool shouldStick = false;
 
@@ -67,7 +78,7 @@ public class Arrow : MonoBehaviour, Charge
             if (shouldStick)
             {
                 // if the object we hit has a component that impliments ShootableObject, call it's OnHit method
-                curCharging = hitObject.GetComponent<ChargeableObject>();
+                curCharging = hitObject.GetComponent<IChargeableObject>();
                 curCharging?.AddCharge(this);
 
                 // sink the arrow a little deeper into the object we hit
@@ -75,7 +86,7 @@ public class Arrow : MonoBehaviour, Charge
 
                 // track the position of the object we hit
                 transform.SetParent(hitObject.transform);
-
+                if (collision.rigidbody != null) collision.rigidbody.velocity = Vector3.zero;
                 // freeze the arrow in place
                 Destroy(rb);
             }

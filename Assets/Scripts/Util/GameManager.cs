@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,13 +7,16 @@ using UnityEngine.SceneManagement;
 // Note; scene enums should be ordered corresponding to their build order
 public enum Scene
 { 
-    IntroLevel
+    IntroLevel,
+    Test
 }
 
 // Kinda lame singleton for handling game logic related stuff,
 // such as loading levels (make async later)
 public class GameManager : MonoBehaviour
 {
+    public ControllableObject startingObject = null;
+
     void Start()
     {
         InitializeSettings();

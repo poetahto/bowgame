@@ -13,75 +13,43 @@ using UnityEngine;
 
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : MonoBehaviour
+public abstract class ControllableObject : MonoBehaviour
 {
-    [Header("GameObject References")]
+    public Controller Controller { get; set; }
+    public bool IsControlled => Controller != null;
+    public Rigidbody body;
 
-    [SerializeField] private Transform cameraTransform = null;
-    [SerializeField] private Transform characterTransform = null;
-
-    [Header("Movement Properties")]
-
-    //[Range(1f, 10f)]
-    [SerializeField] private float jumpHeight = 2f;
-
-    //[Range(1f, 10f)]
-    [SerializeField] private float mouseSensitivity = 3f;
-
-    //[Range(1f, 100f)]
-    [SerializeField] private float maxSpeed = 4f;
-
-    //[Range(1f, 100f)]
-    [SerializeField] private float acceleration = 26f, airAcceleration = 1f;
-
-    [Range(0f, 90f)]
-    [SerializeField] private float maxGroundAngle = 10f;
-
-    [Range(0, 5)]
-    [SerializeField] private float maxAirJumps = 0;
+    public abstract ControllableProperties Properties { get; }
 
     private bool OnGround => groundContactCount > 0;
     private bool desiredJump;
     private float minNormalY;
     private int usedJumps;
     private int groundContactCount;
-    private Rigidbody body, connectedBody, previousConnectedBody;
+    private Rigidbody connectedBody, previousConnectedBody;
     private Vector3 velocity, desiredVelocity, connectionVelocity;
     private Vector3 connectionWorldPosition, connectionLocalPosition;
     private Vector3 contactNormal;
 
-    void Awake()
+    public void Start()
     {
-        body = GetComponent<Rigidbody>();
-
-        // Calculate the minNormalY everytime we run the game, both in editor and build
-        OnValidate();
+        minNormalY = Mathf.Cos(Properties.MaxGroundAngle * Mathf.Deg2Rad);
     }
 
     void Update()
     {
-        /*
-            process keyboard inputs that are only for testing
-        */
-        HandleDebugInput();
-
-        /*
-            uses mouse input to update the rotations of the player rigidbody
-            and the player camera
-        */
-        HandleMouseInput();
-
-        /*
-            uses keyboard input to update our desiredVelocity 
-            (doesn't actually move player)
-        */
-        HandleKeyboardInput();
-
-        /*
-            allows camera to smoothly follow the character since fixed physics 
-            updates cause the rigidbody to stutter as it moves
-        */
-        UpdateCameraPos();
+        if (Controller != null)
+        {
+            /*
+                uses keyboard input to update our desiredVelocity 
+                (doesn't actually move player)
+            */
+            HandleKeyboardInput();
+            /*
+                process keyboard inputs that are only for testing
+            */
+            HandleDebugInput();
+        }
     }
 
     void FixedUpdate()
@@ -102,38 +70,19 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            GameManager.LoadLevel(Scene.IntroLevel);
+            GameManager.LoadLevel(Scene.Test);
         }
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Time.timeScale = Time.timeScale == 0.25f ? 1f : 0.25f;
-        }
-    }
+            RaycastHit hit;
 
-    private void HandleMouseInput()
-    {
-        // calculate new rotation from mouse input and sensitivity
-        float newRotationY = characterTransform.localEulerAngles.y + Input.GetAxis("Mouse X") * mouseSensitivity;
-        float newRotationX = cameraTransform.localEulerAngles.x - Input.GetAxis("Mouse Y") * mouseSensitivity;
-
-        // clamp X rotation to between 0-90 and 270-360 because euler angles wrap at 0
-        // TODO is there a better way to do this?
-        if (newRotationX > 90 && newRotationX < 270)
-        {
-            if (newRotationX < 180)
+            if (Physics.Raycast(Controller.instance.transform.position, Controller.instance.transform.TransformDirection(Vector3.forward), out hit, 1 << 8))
             {
-                newRotationX = 90;
-            }
-            else if (newRotationX > 180)
-            {
-                newRotationX = 270;
+                ControllableObject obj = hit.transform.GetComponent<ControllableObject>();
+                Controller.AttachTo(obj);
             }
         }
-
-        // update local rotation with the values we calculated, no z because we dont want to pitch or roll
-        characterTransform.localEulerAngles = new Vector3(0f, newRotationY, 0f);
-        cameraTransform.localEulerAngles = new Vector3(newRotationX, newRotationY, 0f);
     }
 
     private void HandleKeyboardInput()
@@ -150,7 +99,7 @@ public class Player : MonoBehaviour
         desiredJump |= Input.GetButtonDown("Jump");
 
         // convert player's input into a 3D vector that represents a target velocity
-        desiredVelocity = (transform.right * playerInput.x + transform.forward * playerInput.y) * maxSpeed;
+        desiredVelocity = (transform.right * playerInput.x + transform.forward * playerInput.y) * Properties.MaxSpeed;
     }
 
     private void UpdateVelocity()
@@ -186,7 +135,7 @@ public class Player : MonoBehaviour
         Vector3 relativeVelocity = velocity - connectionVelocity;
 
         // Adjusts our acceleration based on whether we are grounded or not
-        float accel = OnGround ? acceleration : airAcceleration;
+        float accel = OnGround ? Properties.GroundAcceleration : Properties.AirAcceleration;
         float maxSpeedChange = accel * Time.deltaTime;
 
         // Represents the x and z components of our current velocity
@@ -204,14 +153,19 @@ public class Player : MonoBehaviour
 
     private void Jump()
     {
-        if (OnGround || usedJumps < maxAirJumps)
+        if (Properties.MaxAirJumps < 0)
+        {
+            return;
+        }
+
+        if (OnGround || usedJumps < Properties.MaxAirJumps)
         {
             // QOL for making double jumps work against gravity
             if (velocity.y < 0) velocity.y = 0;
 
             // Some physics equation or something for realistic jump speed?? It works but
             // we don't really care about scientific accuracy here, so maybe change later
-            float jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * jumpHeight);
+            float jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * Properties.JumpHeight);
 
             // Represents the player's current speed in the y direction away from the surface they are standing on
             float alignedSpeed = Vector3.Dot(velocity, contactNormal);
@@ -227,23 +181,6 @@ public class Player : MonoBehaviour
             velocity += contactNormal * jumpSpeed;
             usedJumps++;
         }
-    }
-
-    private void UpdateCameraPos()
-    {
-        // Updates the camera's position every frame to smoothly follow the player around.
-        // I did this because standard parenting of the camera to the player caused jerky 
-        // movements, and increasing the physics tick rate really slows stuff down.
-
-        Vector3 cameraPos = cameraTransform.position;
-
-        float velocityChange = Mathf.Max(velocity.magnitude * Time.deltaTime, 0.01f);
-
-        cameraPos.x = Mathf.MoveTowards(cameraPos.x, characterTransform.position.x, velocityChange);
-        cameraPos.y = Mathf.MoveTowards(cameraPos.y, characterTransform.position.y + 0.5f, velocityChange);
-        cameraPos.z = Mathf.MoveTowards(cameraPos.z, characterTransform.position.z, velocityChange);
-
-        cameraTransform.position = cameraPos;
     }
 
     private void UpdateState() 
@@ -323,21 +260,12 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnValidate()
-    {
-        // When we check our collision with the ground, the Y value of the normal must
-        // be greater than this value for it to count as ground (refreshing jump, ect).
-        // The reason this works is dot product, 1 * 1 * cos(ground angle).
-
-        minNormalY = Mathf.Cos(maxGroundAngle * Mathf.Deg2Rad);
-    }
-
-    private void OnCollisionEnter(Collision collision)
+    protected void OnCollisionEnter(Collision collision)
     {
         EvaluateCollision(collision);
     }
 
-    private void OnCollisionStay(Collision collision)
+    protected void OnCollisionStay(Collision collision)
     {
         EvaluateCollision(collision);
     }
@@ -352,5 +280,28 @@ public class Player : MonoBehaviour
         /// Debug.DrawLine(transform.position, transform.position + result, Color.blue);
 
         return result;
+    }
+
+    public Vector3 getVelocity()
+    {
+        return body.velocity;
+    }
+
+    public Vector3 getPosition()
+    {
+        return transform.position;
+    }
+
+    public void DetachController()
+    {
+        gameObject.layer = 8;
+        Controller = null;
+        desiredVelocity = Vector3.zero;
+    }
+
+    public void AttachController(Controller controller)
+    {
+        gameObject.layer = 9;
+        Controller = controller;
     }
 }

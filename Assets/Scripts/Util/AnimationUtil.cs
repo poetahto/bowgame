@@ -6,7 +6,7 @@ using UnityEngine;
 // for helping animate different properties of GameObjects, and is 
 // especially efficient for animating UI elements.
 
-public class AnimationHelper
+public class AnimationUtil
 {
     // Scales target game object to the desired size.
     public static void ChangeSize(GameObject targetObject, float targetX, float targetY, float targetZ, float time, bool cancelCurrentAnimation = true)
